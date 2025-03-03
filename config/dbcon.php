@@ -2,11 +2,11 @@
 define('DB_HOST', 'localhost');
 define('DB_USER', 'root');
 define('DB_PASSWORD', '');
-define('DB_NAME', 'plm');
+define('DB_NAME', 'ams');
 define('port', '3308');
 
 try{
-    $dsn = 'mysql:host='. 'localhost'. ';dbname='. 'plm'. ';port='. '3308';
+    $dsn = 'mysql:host='. 'localhost'. ';dbname='. 'ams'. ';port='. '3308';
 
     $options = [
         PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
