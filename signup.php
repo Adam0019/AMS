@@ -21,10 +21,10 @@ include('config/dbcon.php');
         <input type="email" id="u_email" name="u_email" required>
         <label for="u_email">Enter your email</label>
     </div>
-    <!-- <div class="input-field">
+    <div class="input-field">
         <input type="phone" id="u_phone" name="u_" required>
         <label for="u_phone">Enter your phone</label>
-    </div> -->
+    </div>
       <div class="input-field">
         <input type="password" id="password" data-type="password" name="password" required>
         <label for="password">Enter your password</label>

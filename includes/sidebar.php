@@ -14,6 +14,12 @@
                         </a>
                     </li>
                     <li class="sidebar-item">
+                        <a href="../User/user.php" class="sidebar-link">
+                           <i class="bi bi-person-vcard"></i>
+                            User
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
                         <a href="../Customer/customer.php" class="sidebar-link">
                            <i class="bi bi-person-vcard"></i>
                             Customer

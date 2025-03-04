@@ -51,7 +51,7 @@ if (isset($_SESSION['userAuth']) && $_SESSION['userAuth']!="" )
                 <table id="example" class="table table-striped data-table"style="width:100%">
                     <thead>
                         <tr>
-                            <th>C_Id</th>
+                            <th>C_ID</th>
                             <th>Name</th>
                             <th>Email</th>
                             <th>Phone</th>
