@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3308
--- Generation Time: Mar 03, 2025 at 04:14 PM
+-- Generation Time: Mar 04, 2025 at 08:56 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -44,7 +44,7 @@ CREATE TABLE `customer_tbl` (
 --
 
 INSERT INTO `customer_tbl` (`c_id`, `c_name`, `c_phone`, `c_email`, `c_address`, `c_role`, `created_at`, `updated_at`, `c_status`) VALUES
-(1, 'test customer1235', '9609687686', 'test@1234', 'test112', 'Buyer', '2025-02-22 12:26:50', '2025-02-22 12:26:50', 'active'),
+(1, 'test customer1235', '9609687686', 'test@1234', 'test112', 'Buyer', '2025-02-22 12:26:50', '2025-02-22 12:26:50', 'inactive'),
 (2, 'poly', '584646428', 'fhuu@gmail', 'fhm', 'Buyer', '2025-02-24 21:01:39', '2025-02-24 21:01:39', 'inactive'),
 (3, 'Ani.exe', '584646428', 'ani.exe@gmail.com', 'burdwan', 'Seller', '2025-02-25 19:14:47', '2025-02-25 19:14:47', 'inactive'),
 (4, 'nyfh', '646674', 'fhc@hj', 'nk', 'Seller', '2025-02-28 20:51:48', '2025-02-28 20:51:48', 'inactive'),
@@ -63,20 +63,23 @@ CREATE TABLE `user_tbl` (
   `u_id` int(20) NOT NULL,
   `u_name` varchar(255) NOT NULL,
   `u_email` varchar(255) DEFAULT NULL,
+  `u_phone` varchar(40) NOT NULL,
   `username` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `role` varchar(255) NOT NULL
+  `u_status` varchar(400) DEFAULT NULL,
+  `role` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `user_tbl`
 --
 
-INSERT INTO `user_tbl` (`u_id`, `u_name`, `u_email`, `username`, `password`, `created_at`, `updated_at`, `role`) VALUES
-(1, 'Kaustab', 'kay@gmail.com', 'Kaustab01', 'Admin001', '2025-02-12 12:24:17', '2025-02-12 12:24:17', 'Admin'),
-(2, 'Ani00', 'Ani001@gmail', 'Ani00', 'Ani001', '2025-02-24 21:26:15', '2025-02-24 21:26:15', '');
+INSERT INTO `user_tbl` (`u_id`, `u_name`, `u_email`, `u_phone`, `username`, `password`, `created_at`, `updated_at`, `u_status`, `role`) VALUES
+(1, 'Kaustab', 'kay@gmail.com', '960758488', 'Kaustab01', 'Admin001', '2025-02-12 12:24:17', '2025-02-12 12:24:17', 'inactive', 'Admin'),
+(2, 'Ani00', 'Ani001@gmail', '960758489', 'Ani00', 'Ani001', '2025-02-24 21:26:15', '2025-02-24 21:26:15', NULL, 'Admin'),
+(3, 'Aniruddha023', 'Aniruddha@gmai', '9844721726', 'Aniruddha01122', 'Aniruddha4567', '2025-03-03 18:43:36', '2025-03-03 18:43:36', 'active', 'User');
 
 --
 -- Indexes for dumped tables
@@ -108,7 +111,7 @@ ALTER TABLE `customer_tbl`
 -- AUTO_INCREMENT for table `user_tbl`
 --
 ALTER TABLE `user_tbl`
-  MODIFY `u_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `u_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
