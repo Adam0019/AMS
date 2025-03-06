@@ -3,6 +3,8 @@ sidebarToggle.addEventListener("click", function () {
   document.querySelector("#sidebar").classList.toggle("collapsed");
 });
 
+/*===================theme===============*/
+
 document.querySelector(".theme-toggle").addEventListener("click", () => {
   toggleLocalStorage();
   toggleRootClass();
