@@ -1,13 +1,18 @@
-<?php 
+<?php
+
 include('config/dbcon.php');
+// header("Content-Type: application/json");
 
 if(isset($_POST['submit'])){
-    $name = $_POST['u_name'];
-    $email = $_POST['u_email'];
-    $phone = $_POST['u_phone'];
-    $username = $_POST['u_name'];
-    $password = $_POST['password'];
-    // $role = $_POST['u_role'];
+    if (!isset($_POST['u_name']) || !isset($_POST['u_email']) || !isset($_POST['u_phone']) || !isset($_POST['password']) || !isset($_POST['role'])) {
+        echo json_encode(["error" => "Missing required fields"]);
+        exit;}
+        $name = $_POST['u_name'];
+        $email = $_POST['u_email'];
+        $phone = $_POST['u_phone'];
+        $username = $_POST['u_name'];
+        $password = $_POST['password'];
+        $role = $_POST['role'];
 
     $stmt = $pdo->prepare("SELECT * FROM user_tbl WHERE username =:username");
     $stmt->execute([$username]);
@@ -19,7 +24,7 @@ if(isset($_POST['submit'])){
         exit;
     }
 else{
-    $sql = "INSERT INTO user_tbl (u_name, u_email, u_phone, username, password) VALUES (:name, :email, :phone, :username, :password)";
+    $sql = "INSERT INTO user_tbl (u_name, u_email, u_phone, username, password, role) VALUES (:name, :email, :phone, :username, :password, :role)";
 
     try{
     $stmt = $pdo->prepare($sql);
@@ -28,6 +33,7 @@ else{
     $stmt-> bindParam(':phone', $phone);
     $stmt-> bindParam(':username', $username);
     $stmt-> bindParam(':password', $password);
+    $stmt-> bindParam(':role', $role);
     if($stmt-> execute()){
         $_SESSION['userAuth'] = "Authorised";}
      $_SESSION['toastr']=['
@@ -36,7 +42,9 @@ else{
     ];
 
     if(isset($_POST['fromUser'])){
-        header('Location: ../User/user.php');
+        // header('Location: ../User/user.php');
+        // exit();
+        echo json_encode(["success" => "User created successfully"]);
         exit();
     }
 
@@ -48,7 +56,7 @@ else{
             'message' => 'User is not created! Error:' . $e->getMessage()
         ];
     }
-    }
+    }}
 
     // if ($stmt->execute()) {
     //     echo '<script>
@@ -62,7 +70,7 @@ else{
     //     </script>';
     // }
 
-}
+
 
 
 ?>

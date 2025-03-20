@@ -1,5 +1,8 @@
-<?php
+ <?php
+
 require_once('../config/dbcon.php');
+
+header('Content-Type: application/json'); // Ensure the response is JSON
 
 if (isset($_GET['id'])) {
     $userId = $_GET['id'];
@@ -11,21 +14,24 @@ if (isset($_GET['id'])) {
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($user) {
-            echo "<p><strong>ID:</strong> " . htmlspecialchars($user['u_id']) . "</p>";
-            echo "<p><strong>Name:</strong> " . htmlspecialchars($user['u_name']) . "</p>";
-            echo "<p><strong>Email:</strong> " . htmlspecialchars($user['u_email']) . "</p>";
-            echo "<p><strong>Phone:</strong> " . htmlspecialchars($user['u_phone']) . "</p>";
-            echo "<p><strong>Username:</strong> " . htmlspecialchars($user['username']) . "</p>";
-            echo "<p><strong>Password:</strong> " . htmlspecialchars($user['password']) . "</p>";
-            echo "<p><strong>Role:</strong> " . htmlspecialchars($user['role']) . "</p>";
-            echo "<p><strong>Status:</strong> " . ($user['u_status'] == 'active' ? 'Inactive' : 'Active') . "</p>";
+            echo json_encode([
+                "success" => true,
+                "id" => $user['u_id'],        
+                "name" => $user['u_name'],    
+                "email" => $user['u_email'],  
+                "password" => $user['password'],
+                "username" => $user['u_name'], 
+                "phone" => $user['u_phone'],  
+                "role" => $user['role'],
+                "status" => ($user['u_status'] == 'active' ? 'Inactive' : 'Active')
+            ]);
         } else {
-            echo "<p class='text-danger'>user not found.</p>";
+            echo json_encode(["success" => false, "message" => "User not found"]);
         }
     } catch (PDOException $e) {
-        echo "<p class='text-danger'>Error fetching user details: " . $e->getMessage() . "</p>";
+        echo json_encode(["success" => false, "message" => "Database error: " . $e->getMessage()]);
     }
 } else {
-    echo "<p class='text-danger'>Invalid request.</p>";
+    echo json_encode(["success" => false, "message" => "User ID not provided"]);
 }
 ?>

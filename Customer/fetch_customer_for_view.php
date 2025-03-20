@@ -1,5 +1,6 @@
 <?php
 require_once('../config/dbcon.php');
+header('Content-Type: application/json'); // Ensure the response is JSON
 
 if (isset($_GET['id'])) {
     $customerId = $_GET['id'];
@@ -11,20 +12,23 @@ if (isset($_GET['id'])) {
         $customer = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($customer) {
-            echo "<p><strong>ID:</strong> " . htmlspecialchars($customer['c_id']) . "</p>";
-            echo "<p><strong>Name:</strong> " . htmlspecialchars($customer['c_name']) . "</p>";
-            echo "<p><strong>Email:</strong> " . htmlspecialchars($customer['c_email']) . "</p>";
-            echo "<p><strong>Phone:</strong> " . htmlspecialchars($customer['c_phone']) . "</p>";
-            echo "<p><strong>Address:</strong> " . htmlspecialchars($customer['c_address']) . "</p>";
-            echo "<p><strong>Role:</strong> " . htmlspecialchars($customer['c_role']) . "</p>";
-            echo "<p><strong>Status:</strong> " . ($customer['c_status'] == 'active' ? 'Inactive' : 'Active') . "</p>";
+           echo json_encode([
+                "success" => true,
+                "id" => $customer['c_id'],        
+                "name" => $customer['c_name'],    
+                "email" => $customer['c_email'],  
+                "phone" => $customer['c_phone'],  
+                "role" => $customer['c_role'],
+                 "status" => ($customer['c_status'] == 'active' ? 'Inactive' : 'Active')
+            ]);   
         } else {
-            echo "<p class='text-danger'>Customer not found.</p>";
+            echo json_encode(["success" => false, "message" => "Customer not found"]);
         }
     } catch (PDOException $e) {
-        echo "<p class='text-danger'>Error fetching customer details: " . $e->getMessage() . "</p>";
+        echo json_encode(["success" => false, "message" => "Database error: " . $e->getMessage()]);
     }
 } else {
-    echo "<p class='text-danger'>Invalid request.</p>";
+     echo json_encode(["success" => false, "message" => "Customer ID not provided"]);
 }
 ?>
+

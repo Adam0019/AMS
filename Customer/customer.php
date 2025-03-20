@@ -159,7 +159,6 @@ if (isset($_SESSION['userAuth']) && $_SESSION['userAuth']!="" )
 
 
 <!-- Edit Customer Modal -->
-<!-- Edit Customer Modal -->
 <div class="modal fade" id="editCustomerModal" tabindex="-1" aria-labelledby="editCustomerModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -189,7 +188,9 @@ if (isset($_SESSION['userAuth']) && $_SESSION['userAuth']!="" )
                             <option value="Seller">Seller</option>
                         </select>
                     </div>
+                    <div class="modal-footer">
                     <button type="submit" class="btn btn-primary">Update Customer</button>
+                    </div>
                 </form>
             </div>
         </div>

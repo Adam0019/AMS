@@ -1,7 +1,9 @@
 <?php
 include('../includes/header.php');
 if(isset($_SESSION['userAuth'])&& $_SESSION['userAuth']!="")
+
 {
+    
     include('../includes/sidebar.php');
 ?>
 <main class="mt-3 pt-3">
@@ -70,9 +72,9 @@ if(isset($_SESSION['userAuth'])&& $_SESSION['userAuth']!="")
                                             <?php echo ($row['u_status'] == 'active') ? 'Inactive' : 'Activate'; ?>
                                         </a>
                     </td>
-                    <td>
-                     <button class="btn btn-info btn-sm viewUser" data-id="<?php echo $row['u_id']; ?>" data-bs-toggle="modal" data-bs-target="#viewUserModal"><i class="bi bi-receipt"></i></button>
-                        
+                    <td>   
+                    <button class="btn btn-info btn-sm viewUser" data-id="<?php echo $row['u_id']; ?>" data-bs-toggle="modal" data-bs-target="#viewUserModal"><i class="bi bi-receipt"></i></button>
+                   
                      <button class="btn btn-warning btn-sm editUser" data-id="<?php echo $row['u_id']; ?>" data-bs-toggle="modal" data-bs-target="#editUserModal"><i class="bi bi-tools"></i></button>
                     </td>
 
@@ -118,13 +120,13 @@ if(isset($_SESSION['userAuth'])&& $_SESSION['userAuth']!="")
                                 <option value="User"selected>User</option>
                                 <option value="Admin">Admin</option>
                             </select>
-                        </div>
+                        </div> 
         </div>
         <input type="hidden" name="submit" value="submit">
         <input type="hidden" name="fromUser" value="fromUser">
         <div class="modal-footer">
-            <a href="user.php"></a>
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <a href="user.php">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button></a>
             <button type="submit" class="btn btn-primary">Save</button>
         </div>
     </form>
@@ -133,6 +135,7 @@ if(isset($_SESSION['userAuth'])&& $_SESSION['userAuth']!="")
 </div>
 
 <!-- View User Modal -->
+
 <div class="modal fade" id="viewUserModal" tabindex="-1" aria-labelledby="viewUserModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -141,12 +144,14 @@ if(isset($_SESSION['userAuth'])&& $_SESSION['userAuth']!="")
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body" id="userDetails">
-                <!-- User details will be loaded here dynamically -->
-                 
+                 <!-- User details will be loaded here dynamically -->
             </div>
         </div>
     </div>
 </div>
+
+
+
 
 <!-- Edit User Modal -->
 <div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
@@ -178,11 +183,13 @@ if(isset($_SESSION['userAuth'])&& $_SESSION['userAuth']!="")
                     <div class="mb-3">
                         <label for="edit_role" class="form-label">Role</label>
                         <select class="form-control" id="edit_role" name="role">
-                            <option value="User">User</option>
+                            <option value="User" selected>User</option>
                             <option value="Admin">Admin</option>
                         </select>
                     </div>
+                    <div class="modal-footer">
                     <button type="submit" class="btn btn-primary">Update User</button>
+                    </div>
                 </form>
             </div>
         </div>

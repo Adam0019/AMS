@@ -22,13 +22,18 @@ include('config/dbcon.php');
         <label for="u_email">Enter your email</label>
     </div>
     <div class="input-field">
-        <input type="phone" id="u_phone" name="u_" required>
+        <input type="phone" id="u_phone" name="u_phone" required>
         <label for="u_phone">Enter your phone</label>
     </div>
       <div class="input-field">
         <input type="password" id="password" data-type="password" name="password" required>
         <label for="password">Enter your password</label>
       </div>
+      <div class="input-field">
+        <select name="role" id="role" required>
+          <option value="User"selected>User</option>
+          <option value="Admin">Admin</option>
+        </select>
       <input type="submit" class="button" value="Sign Up" name="submit">
       <div class="register">
         <p>Already have an account? <a href="index.php">Login</a></p>
