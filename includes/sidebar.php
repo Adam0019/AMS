@@ -14,10 +14,24 @@
                         </a>
                     </li>
                     <li class="sidebar-item">
+                        <a href="#" class="sidebar-link collapsed" data-bs-target="#pages1" data-bs-toggle="collapse"
+                            aria-expanded="false"><i class="bi bi-person-badge-fill"></i>
+                            Admin Settings
+                        </a>
+                    <ul id="pages1" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">    
+                    <li class="sidebar-item">
                         <a href="../User/user.php" class="sidebar-link">
                            <i class="bi bi-person-vcard"></i>
                             User
                         </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="../Accounts/account.php" class="sidebar-link">
+                            <i class="bi bi-credit-card-fill"></i>
+                             Account
+                        </a>
+                    </li>
+                    </ul>
                     </li>
                     <li class="sidebar-item">
                         <a href="../Customer/customer.php" class="sidebar-link">

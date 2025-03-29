@@ -4,7 +4,7 @@ include('theme.php')
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://kit.fontawesome.com/ae360af17e.js" crossorigin="anonymous"></script>
+    <!-- <script src="https://kit.fontawesome.com/ae360af17e.js" crossorigin="anonymous"></script> -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="../js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.0.2/dist/chart.min.js"></script>
@@ -228,7 +228,68 @@ $(document).ready(function () {
 
 //////////// USER Ends ////////////
 
+//////////// ACCOUNT Starts ////////////
+    //modal toggle
+   $(document).ready(function () {
+            function toggleFields() {
+                let isBank = $("#bank").is(":checked");
+                
+                $("#ab_nameField").toggle(isBank);
+                $("#acc_numField").toggle(isBank);
+                $("#acc_typeField").toggle(isBank);
+            }
 
+            // Run when radio button is clicked
+            $('input[name="a_type"]').change(toggleFields);
+
+            // Run on page load to ensure proper visibility
+            toggleFields();
+        });
+
+    // ADD NEW ACCOUNT
+
+    $(document).ready(function(){
+        $('#accountForm').on('submit', function(e){
+            e.preventDefault();
+            console.log('account working');
+
+            $.ajax({
+                url:'../Accounts/store_account.php',
+                type:'POST',
+                data: $(this).serialize(),
+                success:function(response){
+                    // console.log('response');
+                    $('#accountModal').modal('hide');
+                    alert('Account created successfully!');
+                    window.location.reload();
+                },
+                error:function(xhr,status,error){
+                    alert('An error occurred: ' + error);
+                }
+            })
+        });
+    });
+
+    //fetch user
+     $('#u_id').on('change', function() {
+        var cat_id = $(this).val();  
+        console.log('hello');
+        if(u_id){
+            $.ajax({
+                url:'../Accounts/fetchUser.php',
+                type:'POST',
+                data:{u_id:u_id},
+                success:function(response){
+                    $('#u_id').html(response);},
+                error:function(xhr,status,error){
+                    console.error("Error fetching user data:", error);
+                }
+            });
+        }else{
+            $('#u_id').html('<option value="">Select User</option>');
+        }
+    });
+//////////// ACCOUNT Ends ////////////
 
     </script>
 

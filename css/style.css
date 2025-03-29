@@ -208,3 +208,7 @@ html[data-bs-theme="light"] .theme-toggle .fa-sun {
   background-color: #ffffff;
   color: #121212;
 } */
+/* Modal */
+.hidden {
+  display: none;
+}

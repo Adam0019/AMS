@@ -15,7 +15,7 @@ if($_SESSION['userAuth']!="" && $_SESSION['userAuth']!=NULL){
                         <div class="col-12 col-md-6 d-flex">
                             <div class="card flex-fill border-0 illustration">
                                 <div class="card-body p-0 d-flex flex-fill">
-                                    <div class="row g-0 w-50">
+                                    <div class="row g-0 w-60">
                                         <div class="col-6">
                                             <div class="p-3 m-1">
                                                 <h4>Welcome Back, Admin</h4>
