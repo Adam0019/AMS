@@ -232,7 +232,7 @@ $(document).ready(function () {
     //modal toggle
    $(document).ready(function () {
             function toggleFields() {
-                let isBank = $("#bank").is(":checked");
+                let isBank = $("#Bank").is(":checked");
                 
                 $("#ab_nameField").toggle(isBank);
                 $("#acc_numField").toggle(isBank);
@@ -289,6 +289,90 @@ $(document).ready(function () {
             $('#u_id').html('<option value="">Select User</option>');
         }
     });
+
+    // View the Account details
+$(document).ready(function(){
+    $(".viewAcc").on("click", function(){
+        let accId=$(this).data("id");
+
+        $.ajax({
+            url:"view_account.php",
+            type: "GET",
+            data: {id:accId},
+            dataType: "json", // Expect JSON response
+            success: function(response){
+                if(response.success){
+                    let accountDetails = `
+                        <p><strong>ID:</strong> ${response.id}</p>
+                        <p><strong>Name:</strong> ${response.name}</p>
+                        <p><strong>Account Number:</strong> ${response.account_number}</p>
+                        <p><strong>Account Name:</strong> ${response.account_name}</p>
+                        <p><strong>Account Type:</strong> ${response.account_type}</p>
+                        <p><strong>Account Amount:</strong> ${response.account_ammo}</p>
+                        <p><strong>Status:</strong> ${response.account_status}</p>
+                    `;
+                    $("#accountDetails").html(accountDetails);
+                }else{
+                    $("#accountDetails").html(`<p style="color: red;">${response.message}</p>`);
+                }
+            },
+            error: function(xhr, status, error){
+                console.error("Error fetching account details:", error);
+                $("#accountDetails").html(`<p style="color: red;">An error occurred while fetching account data.</p>`);
+            }
+        })
+    })
+})
+
+// Edit the Account details
+$(document).ready(function(){
+    $(".editAcc").on("click", function(){
+        let accId=$(this).data("id");
+
+        $.ajax({
+            url:"fetch_account.php",
+            type: "GET",
+            data: {id:accId},
+            dataType: "json",
+            success: function(data){
+                $("#edit_acc_id").val(data.acc_id);
+                $("#edit_u_id").val(data.u_id);
+                $("#edit_acc_num").val(data.acc_num);
+                $("#edit_ab_name").val(data.ab_name);
+                $("#edit_acc_ammo").val(data.acc_ammo);
+                $("#edit_acc_type").val(data.acc_type);
+            },
+            error: function(xhr, status, error){
+                console.error("Error loading account data:", error);
+            }
+        });
+    
+    });
+});
+
+$(document).ready(function(){
+    $("#editAccForm").on("submit", function(e){
+        e.preventDefault();
+        
+        let formData = new FormData(this);
+
+        $.ajax({
+            url:"update_account.php",
+            type: "POST",
+            data: formData,
+            processData: false, // Prevent jQuery from converting the data
+            contentType: false, // Prevent jQuery from adding a content-type header
+            success: function(response){
+                alert("Account updated successfully!"); // Show success/error message
+                location.reload(); // Refresh the page
+            },
+            error: function(xhr, status, error){
+                console.error("Error updating account:", error);
+            }
+        });
+    });
+});
+
 //////////// ACCOUNT Ends ////////////
 
     </script>

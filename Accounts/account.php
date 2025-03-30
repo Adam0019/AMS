@@ -8,7 +8,7 @@ if(isset($_SESSION['userAuth'])&& $_SESSION['userAuth']!=""){
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-8">
-                <h4><i class="bi bi-person-square"></i>Manage Account</h4>
+                <h4><i class="bi bi-cash-coin"></i> Manage Account</h4>
                 </div>
 
                 <?php
@@ -111,10 +111,10 @@ $query1 = "SELECT * FROM user_tbl";
               <!-- Bank / Cash Selection -->
               <div class="mb-3">
                 <label class="form-label">Payment Method</label><br />
-                <input type="radio" name="a_type" value="bank" id="bank" class="toggle-fields" />
-                <label for="bank">Bank</label>
-                <input type="radio" name="a_type" value="cash" id="cash" class="toggle-fields" checked />
-                <label for="cash">Cash</label>
+                <input type="radio" name="a_type" value="Bank" id="Bank" class="toggle-fields" />
+                <label for="Bank">Bank</label>
+                <input type="radio" name="a_type" value="Cash" id="Cash" class="toggle-fields" checked />
+                <label for="Cash">Cash</label>
               </div>
 
               <!-- Bank Name -->
@@ -157,8 +157,75 @@ $query1 = "SELECT * FROM user_tbl";
       </div>
     </div>
 
-    
 
+<!-- View Account Modal -->
+    <div class="modal fade" id="viewAccModal" tabindex="-1" aria-labelledby="viewAccModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="viewAccModalLabel">Account Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="accountDetails">
+                 <!-- Account details will be loaded here dynamically -->
+            </div>
+        </div>
+    </div>
+</div>
+<?php
+$query3 = "SELECT * FROM user_tbl";
+                $stmt = $pdo->prepare($query1);
+                $row3 = $stmt->execute();
+?>
+<!-- Edit Account Modal -->
+ <div class="modal fade" id="editAccModal" tabindex="-1" aria-labelledby="editAccModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editAccModalLabel">Edit Account</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editAccForm">
+                    <input type="hidden" id="edit_acc_id" name="acc_id">
+                    <div class="mb-3">
+                        <label for="edit_u_id">Account Holder's Name</label>
+                <select class="form-control" id="edit_u_id" name="u_id" required>
+                  <option value = "<?php echo $row2['u_id']?>"><?php echo $row2['u_name']?> </option>
+                  <?php
+                  while($row3 = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                      echo '<option value="'.$row3['u_id'].'">'.$row3['u_name'].'</option>';
+                  }
+                  ?>
+                </select>  
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit_acc_num" class="form-label">Account Number</label>
+                        <input type="text" class="form-control" id="edit_acc_num" name="acc_num" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit_ab_name" class="form-label">Account Name</label>
+                        <input type="text" class="form-control" id="edit_ab_name" name="ab_name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit_acc_ammo" class="form-label">Amount</label>
+                        <input type="text" class="form-control" id="edit_acc_ammo" name="acc_ammo" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit_acc_type" class="form-label">Account Type</label>
+                        <select class="form-control" id="edit_acc_type" name="acc_type">
+                             <option value="savings">Savings</option>
+                             <option value="current">Current</option>
+                        </select>
+                    </div>
+                    <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Update Account</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
 <?php
 
