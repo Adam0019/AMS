@@ -81,6 +81,8 @@ if (isset($_SESSION['userAuth']) && $_SESSION['userAuth']!="" )
                             <button class="btn btn-info btn-sm viewCustomer" data-id="<?php echo $row['c_id']; ?>" data-bs-toggle="modal" data-bs-target="#viewCustomerModal"><i class="bi bi-receipt"></i></button>
                         
                             <button class="btn btn-warning btn-sm editCustomer" data-id="<?php echo $row['c_id']; ?>" data-bs-toggle="modal" data-bs-target="#editCustomerModal"><i class="bi bi-tools"></i></button>
+                            
+                            <button class="btn btn-danger btn-sm deleteCustomer" data-id="<?php echo $row['c_id'];?>" data-bs-toggle="modal" data-bs-target="#deleteCustomerModal"><i class="bi bi-trash"></i></button>
                         </td>
                             
                         </tr>
@@ -197,7 +199,26 @@ if (isset($_SESSION['userAuth']) && $_SESSION['userAuth']!="" )
     </div>
 </div>
 
+<!-- Delete Customer Modal -->
 
+<div class="modal fade" id="deleteCustomerModal" tabindex="-1" aria-labelledby="deleteCustomerModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title" id="deleteCustomerModalLabel">Delete Customer</h1>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to delete this Customer?
+        <input type="hidden" id="deleteCUSId">
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="confirmDeleteCus" class="btn btn-danger">Delete</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 
 <?php

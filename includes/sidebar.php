@@ -31,6 +31,12 @@
                              Account
                         </a>
                     </li>
+                    <li class="sidebar-item">
+                        <a href="../General_Ledger/gl_title.php" class="sidebar-link">
+                            <i class="bi bi-credit-card-fill"></i>
+                             General Ledger
+                        </a>
+                    </li>
                     </ul>
                     </li>
                     <li class="sidebar-item">

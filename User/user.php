@@ -76,6 +76,8 @@ if(isset($_SESSION['userAuth'])&& $_SESSION['userAuth']!="")
                     <button class="btn btn-info btn-sm viewUser" data-id="<?php echo $row['u_id']; ?>" data-bs-toggle="modal" data-bs-target="#viewUserModal"><i class="bi bi-receipt"></i></button>
                    
                      <button class="btn btn-warning btn-sm editUser" data-id="<?php echo $row['u_id']; ?>" data-bs-toggle="modal" data-bs-target="#editUserModal"><i class="bi bi-tools"></i></button>
+
+                     <button class="btn btn-danger btn-sm deleteUser" data-id="<?php echo $row['u_id'];?>" data-bs-toggle="modal" data-bs-target="#deleteUserModal"><i class="bi bi-trash"></i></button>
                     </td>
 
                 </tr>
@@ -199,6 +201,25 @@ if(isset($_SESSION['userAuth'])&& $_SESSION['userAuth']!="")
 
 
 
+<!-- Delete User Modal -->
+<div class="modal fade" id="deleteUserModal" tabindex="-1" aria-labelledby="deleteUserModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title" id="deleteUserModalLabel">Delete User</h1>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to delete this User?
+        <input type="hidden" id="deleteUserId">
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="confirmDeleteUser" class="btn btn-danger">Delete</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 
 <?php

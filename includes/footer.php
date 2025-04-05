@@ -107,6 +107,36 @@ $(document).ready(function () {
     });
 });
 
+////Delete Customer
+
+$(document).ready(function() {
+    
+    $('.deleteCustomer').on('click', function() {
+        const c_Id = $(this).data('id');
+        $('#deleteCUSId').val(c_Id);
+    });
+
+    // Confirm delete
+    $('#confirmDeleteCus').on('click', function() {
+        const c_Id = $('#deleteCUSId').val();
+
+        $.ajax({
+            url: 'delete_customer.php',
+            type: 'POST',
+            data: { c_id: c_Id },
+            success: function(response) {
+                // Handle success response
+                $('#deleteCustomerModal').modal('hide');
+                 alert("Customer deleted successfully!");
+                window.location.reload();
+                
+            },
+            error: function() {
+                alert('Error deleting customer.');
+            }
+        });
+    });
+});
 
 
 ///////////CUSTOMER Ends//////////
@@ -220,6 +250,37 @@ $(document).ready(function () {
             },
             error: function (xhr, status, error) {
                 console.error("Error updating user:", error);
+            }
+        });
+    });
+});
+
+////Delete User
+
+$(document).ready(function() {
+    
+    $('.deleteUser').on('click', function() {
+        const u_Id = $(this).data('id');
+        $('#deleteUserId').val(u_Id);
+    });
+
+    // Confirm delete
+    $('#confirmDeleteUser').on('click', function() {
+        const u_Id = $('#deleteUserId').val();
+
+        $.ajax({
+            url: 'delete_user.php',
+            type: 'POST',
+            data: { u_id: u_Id },
+            success: function(response) {
+                // Handle success response
+                $('#deleteUserModal').modal('hide');
+                 alert("User deleted successfully!");
+                window.location.reload();
+                
+            },
+            error: function() {
+                alert('Error deleting user.');
             }
         });
     });
@@ -373,7 +434,143 @@ $(document).ready(function(){
     });
 });
 
+////Delete Account
+
+$(document).ready(function() {
+    
+    $('.deleteAcc').on('click', function() {
+        const acc_Id = $(this).data('id');
+        $('#deleteACCId').val(acc_Id);
+    });
+
+    // Confirm delete
+    $('#confirmDeleteAcc').on('click', function() {
+        const acc_Id = $('#deleteACCId').val();
+
+        $.ajax({
+            url: 'delete_account.php',
+            type: 'POST',
+            data: { acc_id: acc_Id },
+            success: function(response) {
+                // Handle success response
+                $('#deleteAccModal').modal('hide');
+                 alert("Account deleted successfully!");
+                window.location.reload();
+                
+            },
+            error: function() {
+                alert('Error deleting user.');
+            }
+        });
+    });
+});
 //////////// ACCOUNT Ends ////////////
+
+//////////// GL Starts ////////////
+
+// ADD NEW GL
+$(document).ready(function(){
+    $('#addGLForm').on('submit', function(e){
+        e.preventDefault();
+        console.log('GL working');
+
+        $.ajax({
+            url:'../General_Ledger/store_gl.php',
+            type:'POST',
+            data: $(this).serialize(),
+            success:function(response){
+                //console.log('response');
+                $('#addGLModal').modal('hide');
+                 alert('GL Title created successfully!');
+                 window.location.reload();
+            },
+            error:function(xhr,status,error){
+                alert('An error occurred: ' + error);
+            }
+        })
+    });
+});
+
+////Delete GL Titles Modal
+
+$(document).ready(function() {
+    
+    $('.deleteGL').on('click', function() {
+        const gl_Id = $(this).data('id');
+        $('#deleteGLId').val(gl_Id);
+        // $('#deleteGLModal').modal('show');
+    });
+
+    // Confirm delete
+    $('#confirmDelete').on('click', function() {
+        const gl_Id = $('#deleteGLId').val();
+
+        $.ajax({
+            url: 'gl_delete.php',
+            type: 'POST',
+            data: { gl_id: gl_Id },
+            success: function(response) {
+                // Handle success response
+                $('#deleteGLModal').modal('hide');
+                 alert("GL Title deleted successfully!");
+                window.location.reload();
+                
+            },
+            error: function() {
+                alert('Error deleting user.');
+            }
+        });
+    });
+});
+
+///Edit GL Modal
+$(document).ready(function () {
+    // Load gl details into Edit Modal
+    $(".editGL").on("click", function () {
+        let glID = $(this).data("id");
+        
+        $.ajax({
+            url: "gl_fetch.php",
+            type: "GET",
+            data: { id: glID },
+            dataType: "json",
+            success: function (data) {
+                // console.log('working');
+                $("#edit_gl_id").val(data.gl_id);
+                $("#edit_gl_name").val(data.gl_name);
+                $("#edit_gl_descript").val(data.gl_descript);
+                $("#edit_gl_type").val(data.gl_type);
+            },
+            error: function (xhr, status, error) {
+                console.error("Error loading gl data:", error);
+            }
+        });
+    });
+
+    // Submit updated data to server
+    $("#editGLForm").on("submit", function (e) {
+        e.preventDefault();
+        let formData = new FormData(this);
+
+        $.ajax({
+            url: "gl_update.php",
+            type: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                alert( "GL updated successfully!"); // Show success/error message
+                location.reload(); // Refresh the page
+            },
+            error: function (xhr, status, error) {
+                console.error("Error updating GL:", error);
+            }
+        });
+    });
+});
+
+
+//////////// GL Ends ////////////
 
     </script>
 

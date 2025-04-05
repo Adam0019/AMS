@@ -72,8 +72,10 @@ if(isset($_SESSION['userAuth'])&& $_SESSION['userAuth']!=""){
                     <button class="btn btn-info btn-sm viewAcc" data-id="<?php echo $row2['acc_id']; ?>" data-bs-toggle="modal" data-bs-target="#viewAccModal"><i class="bi bi-receipt"></i></button>
                    
                      <button class="btn btn-warning btn-sm editAcc" data-id="<?php echo $row2['acc_id']; ?>" data-bs-toggle="modal" data-bs-target="#editAccModal"><i class="bi bi-tools"></i></button>
+                     
+                     <button class="btn btn-danger btn-sm deleteAcc" data-id="<?php echo $row2['acc_id'];?>" data-bs-toggle="modal" data-bs-target="#deleteAccModal"><i class="bi bi-trash"></i></button>
                     </td>
-
+                     
                                 </tr>
                                 <?php }?>
                         </tbody>
@@ -226,6 +228,29 @@ $query3 = "SELECT * FROM user_tbl";
         </div>
     </div>
 </div>
+
+<!-- Delete Account Modal -->
+
+<div class="modal fade" id="deleteAccModal" tabindex="-1" aria-labelledby="deleteAccModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title" id="deleteAccModalLabel">Delete Account</h1>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to delete this Account?
+        <input type="hidden" id="deleteACCId">
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="confirmDeleteAcc" class="btn btn-danger">Delete</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 
 <?php
 

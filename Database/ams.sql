@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3308
--- Generation Time: Mar 29, 2025 at 07:39 PM
+-- Generation Time: Apr 05, 2025 at 09:19 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -45,7 +45,8 @@ CREATE TABLE `account_tbl` (
 --
 
 INSERT INTO `account_tbl` (`acc_id`, `ab_name`, `acc_num`, `acc_status`, `acc_ammo`, `acc_type`, `a_type`, `created_at`, `updated_at`, `u_id`) VALUES
-(1, 'Axis', '6445649659', NULL, '200000', 'savings', 'bank', '2025-03-29 18:37:39', '2025-03-29 18:37:39', 1);
+(1, 'Axis', '6445649659', 'active', '200000', 'savings', 'bank', '2025-03-29 18:37:39', '2025-03-29 18:37:39', 1),
+(2, '', '', NULL, '2510', 'savings', 'Cash', '2025-04-05 14:46:30', '2025-04-05 14:46:30', 1);
 
 -- --------------------------------------------------------
 
@@ -71,13 +72,35 @@ CREATE TABLE `customer_tbl` (
 
 INSERT INTO `customer_tbl` (`c_id`, `c_name`, `c_phone`, `c_email`, `c_address`, `c_role`, `created_at`, `updated_at`, `c_status`) VALUES
 (1, 'test customer1235', '9609687686', 'test@1234', 'test112', 'Buyer', '2025-02-22 12:26:50', '2025-02-22 12:26:50', 'inactive'),
-(2, 'poly', '584646428', 'fhuu@gmail', 'fhm', 'Buyer', '2025-02-24 21:01:39', '2025-02-24 21:01:39', 'inactive'),
 (3, 'Ani.exe', '584646428', 'ani.exe@gmail.com', 'burdwan', 'Seller', '2025-02-25 19:14:47', '2025-02-25 19:14:47', 'inactive'),
 (4, 'Ani.exe22012', '22222555342', 'Ani@99082', 'nk', 'Seller', '2025-02-28 20:51:48', '2025-02-28 20:51:48', 'inactive'),
 (5, 'test customer2', '78947484448', 'oba@gmail', 'heonrnj', 'Seller', '2025-03-01 10:29:41', '2025-03-01 10:29:41', 'inactive'),
-(6, 'test customer321', '557896285926', 'fhch@12324', 'xf,fxhfzdjz', 'Buyer', '2025-03-01 10:30:29', '2025-03-01 10:30:29', 'inactive'),
 (7, 'test 6', '498564894856', 'jgcrykyrrry@225', 'fh', 'Buyer', '2025-03-01 14:59:29', '2025-03-01 14:59:29', NULL),
 (8, 'test 7', '85166485484', 'gtansd@tdegn', 'tu,t,ttu,u', 'Buyer', '2025-03-03 15:13:39', '2025-03-03 15:13:39', 'active');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `gl_tbl`
+--
+
+CREATE TABLE `gl_tbl` (
+  `gl_id` int(200) NOT NULL,
+  `gl_name` varchar(450) NOT NULL,
+  `gl_descript` varchar(450) DEFAULT NULL,
+  `gl_type` varchar(450) NOT NULL,
+  `gl_status` varchar(450) DEFAULT NULL,
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `gl_tbl`
+--
+
+INSERT INTO `gl_tbl` (`gl_id`, `gl_name`, `gl_descript`, `gl_type`, `gl_status`, `created_at`, `updated_at`) VALUES
+(6, 'Loan', 'debited by koman', 'Debit', NULL, '2025-04-06 00:08:09', '2025-04-06 00:08:09'),
+(7, 'Capital', 'credited by koman', 'Credit', NULL, '2025-04-06 00:08:34', '2025-04-06 00:08:34');
 
 -- --------------------------------------------------------
 
@@ -108,8 +131,7 @@ INSERT INTO `user_tbl` (`u_id`, `u_name`, `u_email`, `u_phone`, `username`, `pas
 (3, 'Aniruddha0234', 'Aniruddha@gmail', '98447217265', 'Aniruddha01122', 'Aniruddha45670', '2025-03-03 18:43:36', '2025-03-03 18:43:36', 'inactive', 'Admin'),
 (4, 'krishna', 'krishna08@gmail', '89795855', 'krishna', 'radheradhe', '2025-03-12 06:53:34', '2025-03-12 06:53:34', NULL, 'Admin'),
 (5, 'krishna2', 'krishna085@gmail', '897958552', 'krishna2', 'radheradhe2', '2025-03-12 07:00:05', '2025-03-12 07:00:05', NULL, 'Admin'),
-(6, 'radha', 'radheradhe@gm', '54646846', 'radha', 'radhekrishna', '2025-03-12 07:02:31', '2025-03-12 07:02:31', NULL, 'Admin'),
-(18, 'test2800', 'fyjjyyff@gamil', '02454875', 'test2', 'kgygxkygyhyc', '2025-03-18 19:29:15', '2025-03-18 19:29:15', NULL, 'User');
+(6, 'radha', 'radheradhe@gm', '54646846', 'radha', 'radhekrishna', '2025-03-12 07:02:31', '2025-03-12 07:02:31', NULL, 'Admin');
 
 --
 -- Indexes for dumped tables
@@ -129,6 +151,12 @@ ALTER TABLE `customer_tbl`
   ADD PRIMARY KEY (`c_id`);
 
 --
+-- Indexes for table `gl_tbl`
+--
+ALTER TABLE `gl_tbl`
+  ADD PRIMARY KEY (`gl_id`);
+
+--
 -- Indexes for table `user_tbl`
 --
 ALTER TABLE `user_tbl`
@@ -142,13 +170,19 @@ ALTER TABLE `user_tbl`
 -- AUTO_INCREMENT for table `account_tbl`
 --
 ALTER TABLE `account_tbl`
-  MODIFY `acc_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `acc_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `customer_tbl`
 --
 ALTER TABLE `customer_tbl`
   MODIFY `c_id` int(200) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- AUTO_INCREMENT for table `gl_tbl`
+--
+ALTER TABLE `gl_tbl`
+  MODIFY `gl_id` int(200) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `user_tbl`
