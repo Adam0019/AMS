@@ -526,8 +526,9 @@ $(document).ready(function() {
 ///Edit GL Modal
 $(document).ready(function () {
     // Load gl details into Edit Modal
-    $(".editGL").on("click", function () {
-        let glID = $(this).data("id");
+    $("#editGL").on("click", function () {
+        var glID = $(this).val();
+        console.log($(this).closest("tr").attr("id"));
         
         $.ajax({
             url: "gl_fetch.php",

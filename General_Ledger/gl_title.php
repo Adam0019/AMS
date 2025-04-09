@@ -67,7 +67,7 @@ if(isset($_SESSION['userAuth'])&& $_SESSION['userAuth']!="")
                                         </a>
                     </td>
                     <td>
-                        <button class="btn btn-warning btn-sm editGL" data-id="<?php echo $row['gl_id']; ?>" data-bs-toggle="modal" data-bs-target="#editGLModal"><i class="bi bi-tools"></i></button>
+                        <button class="btn btn-warning btn-sm editGL" id="editGL" value="<?php echo $row['gl_id']; ?>" data-id="<?php echo $row['gl_id']; ?>" data-bs-toggle="modal" data-bs-target="#editGLModal"><i class="bi bi-tools"></i></button>
 
                         <button class="btn btn-danger btn-sm deleteGL" data-id="<?php echo $row['gl_id']; ?>" data-bs-toggle="modal" data-bs-target="#deleteGLModal"><i class="bi bi-trash"></i></button>
                     </td>
@@ -95,14 +95,19 @@ if(isset($_SESSION['userAuth'])&& $_SESSION['userAuth']!="")
                         </div>
                         <div class="form-group mt-4">
                             <label for="gl_descript">Description</label>
-                            <input type="text" class="form-control" id="gl_descript" name="gl_descript" placeholder="Description" required>
+                            <select class="form-control" id="gl_descript" name="gl_descript" placeholder="Description" >
+                                <option value="Assets"selected>Assets</option>
+                                <option value="Liabilities">Liabilities</option>
+                                <option value="Income">Income</option>
+                                <option value="Expenses">Expenses</option>
+                            </select>
                         </div>
                         <div class="form-group mt-4">
                             <label for="gl_type">Type</label>
                             <select class="form-select" id="gl_type" name="gl_type" required>
-                                <option value="Debit"selected>Debit</option>
-                                <option value="Credit">Credit</option>
-                            </select>
+                                <option value="Credit"selected>Credit</option>
+                           <option value="Debit">Debit</option>
+                        </select>
                         </div>
                         <input type="hidden" name="submit" value="submit">
                         <input type="hidden" name="fromGL" value="fromGL">
@@ -116,6 +121,7 @@ if(isset($_SESSION['userAuth'])&& $_SESSION['userAuth']!="")
                  </div>
              </div>
         </div>
+
 
 
 <!-- Edit GL Modal -->
@@ -135,13 +141,18 @@ if(isset($_SESSION['userAuth'])&& $_SESSION['userAuth']!="")
                     </div>
                     <div class="mb-3">
                         <label for="edit_gl_descript" class="form-label">Description</label>
-                        <input type="text" class="form-control" id="edit_gl_descript" name="gl_descript" required>
+                        <select class="form-control" id="edit_gl_descript" name="gl_descript" >
+                             <option value="Assets">Assets</option>
+                           <option value="Liabilities">Liabilities</option>
+                           <option value="Income">Income</option>
+                           <option value="Expenses">Expenses</option>
+                           </select>
                     </div>
                     <div class="mb-3">
                         <label for="edit_gl_type" class="form-label">Type</label>
                         <select class="form-control" id="edit_gl_type" name="gl_type">
+                          <option value="Credit">Credit</option>
                            <option value="Debit">Debit</option>
-                            <option value="Credit">Credit</option>
                         </select>
                     </div>
                     <div class="modal-footer">
