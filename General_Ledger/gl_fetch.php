@@ -10,12 +10,12 @@ if (!isset($_GET['id']) || empty($_GET['id'])) {
     exit;
 }
 
-$gl_Id = filter_var($_GET['id'], FILTER_VALIDATE_INT);
+$glId = filter_var($_GET['id'], FILTER_VALIDATE_INT);
 
 try {
     $query = "SELECT * FROM gl_tbl WHERE gl_id = :id";
     $stmt = $pdo->prepare($query);
-    $stmt->bindParam(':id', $gl_Id, PDO::PARAM_INT);
+    $stmt->bindParam(':id', $glId, PDO::PARAM_INT);
     $stmt->execute();
     $gl = $stmt->fetch(PDO::FETCH_ASSOC);
 

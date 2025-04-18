@@ -521,14 +521,14 @@ $(document).ready(function() {
             }
         });
     });
-});
+// });
 
 ///Edit GL Modal
-$(document).ready(function () {
+// $(document).ready(function () {
     // Load gl details into Edit Modal
-    $("#editGL").on("click", function () {
-        var glID = $(this).val();
-        console.log($(this).closest("tr").attr("id"));
+    $(".editGL").on("click", function () {
+        let glID = $(this).data("id");
+        console.log(glID);
         
         $.ajax({
             url: "gl_fetch.php",

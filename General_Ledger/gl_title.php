@@ -156,6 +156,8 @@ if(isset($_SESSION['userAuth'])&& $_SESSION['userAuth']!="")
                         </select>
                     </div>
                     <div class="modal-footer">
+                    <a href="gl_title.php">
+                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button></a>
                     <button type="submit" class="btn btn-primary">Update GL</button>
                     </div>
                 </form>
