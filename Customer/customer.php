@@ -37,8 +37,8 @@ if (isset($_SESSION['userAuth']) && $_SESSION['userAuth']!="" )
             // Fetch all Customer from the database
             try{
           
-            $querry = " SELECT * FROM customer_tbl ORDER BY c_id";
-            $stmt = $pdo->prepare($querry);
+            $query = " SELECT * FROM customer_tbl ORDER BY c_id";
+            $stmt = $pdo->prepare($query);
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
             }catch(PDOException $e){
@@ -66,21 +66,26 @@ if (isset($_SESSION['userAuth']) && $_SESSION['userAuth']!="" )
                         foreach($result as $row){
                         ?>
                         <tr>
-                            <td ><?php echo htmlspecialchars($row['c_id']);?></td>
-                            <td><?php echo htmlspecialchars($row['c_name']);?></td>
-                            <td><?php echo htmlspecialchars($row['c_email']);?></td>
-                            <td><?php echo htmlspecialchars($row['c_phone']);?></td>
-                            <td><?php echo htmlspecialchars($row['c_role']);?></td>
+                            <td ><?php echo $row['c_id'];?></td>
+                            <td><?php echo htmlspecialchars( $row['c_name']);?></td>
+                            <td><?php echo htmlspecialchars( $row['c_email']);?></td>
+                            <td><?php echo htmlspecialchars( $row['c_phone']);?></td>
+                            <td><?php echo htmlspecialchars( $row['c_role']);?></td>
                             <td>
-                                <a href="toggle_customer_status.php?id=<?php echo $row['c_id']; ?>"<button type="button" class="btn btn-primary btn-sm" data-toggle="button" aria-pressed="false" autocomplete="off">
-                                        </button>
-                                            <?php echo ($row['c_status'] == 'active') ? 'Inactive' : 'Activate'; ?>
-                                        </a>
+                                 <a href="toggle_customer_status.php?id=<?php echo htmlspecialchars($row['c_id']); ?>" class="btn btn-sm <?php echo ($row['c_status'] == 'active') ? 'btn-success' : 'btn-secondary'; ?>">
+                                    <?php echo ($row['c_status'] == 'active') ? 'Active' : 'Inactive'; ?>
+                                </a>
                             </td>
                             <td>
-                            <button class="btn btn-info btn-sm viewCustomer" data-id="<?php echo $row['c_id']; ?>" data-bs-toggle="modal" data-bs-target="#viewCustomerModal"><i class="bi bi-receipt"></i></button>
+                            <button class="btn btn-info btn-sm viewCustomer" data-id="<?php echo $row['c_id']; ?>"data-name="<?php echo $row['c_name'];?>"data-email="<?php echo $row['c_email'];?>"data-phone="<?php echo $row['c_phone'];?>"data-type="<?php echo $row['c_role'];?>"  data-bs-toggle="modal" data-bs-target="#viewCustomerModal"><i class="bi bi-receipt"></i></button>
                         
-                            <button class="btn btn-warning btn-sm editCustomer" data-id="<?php echo $row['c_id']; ?>" data-bs-toggle="modal" data-bs-target="#editCustomerModal"><i class="bi bi-tools"></i></button>
+                            <button class="btn btn-warning btn-sm editCustomer"
+                             data-id="<?php echo $row['c_id']; ?>"
+                             data-name="<?php echo $row['c_name'];?>"
+                             data-email="<?php echo $row['c_email'];?>"
+                             data-phone="<?php echo $row['c_phone'];?>"
+                             data-type="<?php echo $row['c_role'];?>"
+                              data-bs-toggle="modal" data-bs-target="#editCustomerModal"><i class="bi bi-tools"></i></button>
                             
                             <button class="btn btn-danger btn-sm deleteCustomer" data-id="<?php echo $row['c_id'];?>" data-bs-toggle="modal" data-bs-target="#deleteCustomerModal"><i class="bi bi-trash"></i></button>
                         </td>
@@ -144,7 +149,7 @@ if (isset($_SESSION['userAuth']) && $_SESSION['userAuth']!="" )
 
 
 <!-- Customer Details Modal -->
-<div class="modal fade" id="viewCustomerModal" tabindex="-1" aria-labelledby="viewCustomerModalLabel" aria-hidden="true">
+<!-- <div class="modal fade" id="viewCustomerModal" tabindex="-1" aria-labelledby="viewCustomerModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -152,50 +157,86 @@ if (isset($_SESSION['userAuth']) && $_SESSION['userAuth']!="" )
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body" id="customerDetails">
-                <!-- Customer details will be loaded here dynamically -->
+                 Customer details will be loaded here dynamically 
                  
+            </div>
+        </div>
+    </div>
+</div> -->
+
+<div class="modal fade" id="viewCustomerModal" tabindex="-1" aria-labelledby="viewCustomerModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="viewCustomerModalLabel">Customer Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                 <input type="hidden" id="view_c_id" name="c_id">
+                <div class="mb-3">
+                    <label for="c_name" class="form-label">Name</label>
+                    <input type="text" class="form-control" id="view_c_name" name="c_name"  readonly>
+                </div>
+                <div class="mb-3">
+                    <label for="c_email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="view_c_email" name="c_email"  readonly>
+                </div>
+                <div class="mb-3">
+                    <label for="c_phone" class="form-label">Phone</label>
+                    <input type="text" class="form-control" id="view_c_phone" name="c_phone" readonly>
+                </div>
+                <div class="mb-3">
+                    <label for="c_role" class="form-label">Role</label>
+                    <input type="text" class="form-control" id="view_c_role" name="c_role" readonly>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
 </div>
 
 
+
 <!-- Edit Customer Modal -->
 <div class="modal fade" id="editCustomerModal" tabindex="-1" aria-labelledby="editCustomerModalLabel" aria-hidden="true">
     <div class="modal-dialog">
+        <form action="update_customer.php" method="POST">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="editCustomerModalLabel">Edit Customer</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" ></button>
             </div>
             <div class="modal-body">
-                <form id="editCustomerForm">
                     <input type="hidden" id="edit_c_id" name="c_id">
                     <div class="mb-3">
-                        <label for="edit_c_name" class="form-label">Name</label>
+                        <label for="c_name" class="form-label">Name</label>
                         <input type="text" class="form-control" id="edit_c_name" name="c_name" required>
                     </div>
-                    <div class="mb-3">
-                        <label for="edit_c_email" class="form-label">Email</label>
+                    <div class="form-group mt-4">
+                        <label for="c_email" class="form-label">Email</label>
                         <input type="email" class="form-control" id="edit_c_email" name="c_email" required>
                     </div>
-                    <div class="mb-3">
-                        <label for="edit_c_phone" class="form-label">Phone</label>
+                    <div class="form-group mt-4">
+                        <label for="c_phone" class="form-label">Phone</label>
                         <input type="text" class="form-control" id="edit_c_phone" name="c_phone" required>
                     </div>
-                    <div class="mb-3">
-                        <label for="edit_c_role" class="form-label">Role</label>
-                        <select class="form-control" id="edit_c_role" name="c_role">
+                    <div class="form-group mt-4">
+                        <label for="c_role">Role</label>
+                        <select class="form-select" id="edit_c_role" name="c_role" required>
                             <option value="Buyer">Buyer</option>
                             <option value="Seller">Seller</option>
                         </select>
                     </div>
+
+            </div>
                     <div class="modal-footer">
                     <button type="submit" class="btn btn-primary">Update Customer</button>
                     </div>
+                    </div>
+               
                 </form>
-            </div>
-        </div>
     </div>
 </div>
 
@@ -206,7 +247,7 @@ if (isset($_SESSION['userAuth']) && $_SESSION['userAuth']!="" )
     <div class="modal-content">
       <div class="modal-header">
         <h1 class="modal-title" id="deleteCustomerModalLabel">Delete Customer</h1>
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <button type="button" class="close" data-bs-dismiss="modal">&times;</button>
       </div>
       <div class="modal-body">
         Are you sure you want to delete this Customer?
@@ -222,7 +263,62 @@ if (isset($_SESSION['userAuth']) && $_SESSION['userAuth']!="" )
 
 
 <?php
-include('../includes/footer.php');
+include('../includes/footer.php');?>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function(){
+        const editButtons = document.querySelectorAll('.editCustomer');
+        editButtons.forEach(button => {
+            button.addEventListener('click',()=>{
+                //Set the values for the modal
+                document.getElementById('edit_c_id').value=button.getAttribute('data-id');
+
+                // Set Name input value
+                const c_name = button.getAttribute('data-name');
+                document.getElementById('edit_c_name').value= c_name;
+                // Set Email input value
+                const c_email = button.getAttribute('data-email');
+                document.getElementById('edit_c_email').value= c_email;
+                // Set Phone input value
+                const c_phone = button.getAttribute('data-phone');
+                document.getElementById('edit_c_phone').value= c_phone;
+                // Set Roll input value
+                const c_role = button.getAttribute('data-type');
+                document.getElementById('edit_c_role').value= c_role;
+
+                
+            });
+        });
+    });
+    document.addEventListener('DOMContentLoaded', function(){
+        const viewButtons = document.querySelectorAll('.viewCustomer');
+        viewButtons.forEach(button => {
+            button.addEventListener('click',()=>{
+                //Set the values for the modal
+                document.getElementById('view_c_id').value=button.getAttribute('data-id');
+
+                // Set Name input value
+                const c_name = button.getAttribute('data-name');
+                document.getElementById('view_c_name').value= c_name;
+                // Set Email input value
+                const c_email = button.getAttribute('data-email');
+                document.getElementById('view_c_email').value= c_email;
+                // Set Phone input value
+                const c_phone = button.getAttribute('data-phone');
+                document.getElementById('view_c_phone').value= c_phone;
+                // Set Roll input value
+                const c_role = button.getAttribute('data-type');
+                document.getElementById('view_c_role').value= c_role;
+
+                
+            });
+        });
+    });
+</script>
+
+
+
+<?php
   }else{
 
 echo '<script>

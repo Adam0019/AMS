@@ -1,34 +1,28 @@
 <?php
 require_once('../config/dbcon.php');
-header('Content-Type: application/json'); // Ensure the response is JSON
 
-if (isset($_GET['id'])) {
-    $customerId = $_GET['id'];
+
+if (isset($_POST['c_id'])) {
+    $c_id = $_POST['c_id'];
     try {
-        $query = "SELECT * FROM customer_tbl WHERE c_id = :id";
+        $query = "SELECT * FROM customer_tbl WHERE c_id = :c_id";
         $stmt = $pdo->prepare($query);
-        $stmt->bindParam(':id', $customerId, PDO::PARAM_INT);
+        $stmt->bindParam(':c_id', $c_id);
         $stmt->execute();
-        $customer = $stmt->fetch(PDO::FETCH_ASSOC);
+       
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if ($customer) {
-           echo json_encode([
-                "success" => true,
-                "id" => $customer['c_id'],        
-                "name" => $customer['c_name'],    
-                "email" => $customer['c_email'],  
-                "phone" => $customer['c_phone'],  
-                "role" => $customer['c_role'],
-                 "status" => ($customer['c_status'] == 'active' ? 'Inactive' : 'Active')
-            ]);   
-        } else {
-            echo json_encode(["success" => false, "message" => "Customer not found"]);
-        }
+         // Return data as JSON
+        header('Content-Type: application/json');
+        echo json_encode($result);
     } catch (PDOException $e) {
-        echo json_encode(["success" => false, "message" => "Database error: " . $e->getMessage()]);
+         // Return error as JSON
+        header('Content-Type: application/json');
+        echo json_encode(['error' => 'Database error: ' . $e->getMessage()]);
     }
 } else {
-     echo json_encode(["success" => false, "message" => "Customer ID not provided"]);
+    header('Content-Type: application/json');
+    echo json_encode(['error' => 'Customer ID not provided']);
 }
 ?>
 

@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 ////////CUSTOMER Starts//////////
 // View the Customer details
-$(document).ready(function () {
+/*$(document).ready(function () {
     $(".viewCustomer").on("click", function () {
         let customerId = $(this).data("id");
 
@@ -65,7 +65,8 @@ $(document).ready(function () {
     // Load customer details into Edit Modal
     $(".editCustomer").on("click", function () {
         let customerId = $(this).data("id");
-        
+                        // console.log(customerId);
+
         $.ajax({
             url: "fetch_customer.php",
             type: "GET",
@@ -105,7 +106,7 @@ $(document).ready(function () {
             }
         });
     });
-});
+});*/
 
 ////Delete Customer
 
@@ -172,7 +173,7 @@ $(document).ready(function() {
 
 
     // View the User details
-$(document).ready(function () {
+/*$(document).ready(function () {
     $(".viewUser").on("click", function () {
         let userId = $(this).data("id");
 
@@ -253,7 +254,7 @@ $(document).ready(function () {
             }
         });
     });
-});
+});*/
 
 ////Delete User
 
@@ -352,7 +353,7 @@ $(document).ready(function() {
     });
 
     // View the Account details
-$(document).ready(function(){
+/*$(document).ready(function(){
     $(".viewAcc").on("click", function(){
         let accId=$(this).data("id");
 
@@ -432,7 +433,7 @@ $(document).ready(function(){
             }
         });
     });
-});
+});*/
 
 ////Delete Account
 
@@ -521,54 +522,75 @@ $(document).ready(function() {
             }
         });
     });
-// });
+});
 
 ///Edit GL Modal
-// $(document).ready(function () {
-    // Load gl details into Edit Modal
-    $(".editGL").on("click", function () {
-        let glID = $(this).data("id");
-        console.log(glID);
+// // $(document).ready(function () {
+//     // Load gl details into Edit Modal
+//     $("#editGL").on("click", function () {
+//         let glID = $(this).data("id");
+//         console.log(glID);
         
-        $.ajax({
-            url: "gl_fetch.php",
-            type: "GET",
-            data: { id: glID },
-            dataType: "json",
-            success: function (data) {
-                // console.log('working');
-                $("#edit_gl_id").val(data.gl_id);
-                $("#edit_gl_name").val(data.gl_name);
-                $("#edit_gl_descript").val(data.gl_descript);
-                $("#edit_gl_type").val(data.gl_type);
-            },
-            error: function (xhr, status, error) {
-                console.error("Error loading gl data:", error);
-            }
-        });
-    });
+//         $.ajax({
+//             url: "gl_fetch.php",
+//             type: "POST",
+//             data: { id: glID },
+//             dataType: "json",
+//             success: function (data) {
+//                 // console.log('working');
+//                 $("#edit_gl_id").val(data.gl_id);
+//                 $("#edit_gl_name").val(data.gl_name);
+//                 $("#edit_gl_descript").val(data.gl_descript);
+//                 $("#edit_gl_type").val(data.gl_type);
+//             },
+//             error: function (xhr, status, error) {
+//                 console.error("Error loading gl data:", error);
+//             }
+//         });
+//     });
 
-    // Submit updated data to server
-    $("#editGLForm").on("submit", function (e) {
-        e.preventDefault();
-        let formData = new FormData(this);
+// $('#editGLForm').on('submit', function(e) {
+//         e.preventDefault(); 
+//         console.log('hiii');
 
-        $.ajax({
-            url: "gl_update.php",
-            type: "POST",
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: function (response) {
-                alert( "GL updated successfully!"); // Show success/error message
-                location.reload(); // Refresh the page
-            },
-            error: function (xhr, status, error) {
-                console.error("Error updating GL:", error);
-            }
-        });
-    });
-});
+//         $.ajax({
+//             url: '../General_Ledger/gl_edit.php',
+//             type: 'POST',
+//             data: $(this).serialize(), 
+//             success: function(response) {
+                
+//                 $("#editGLModal").modal("hide");
+//                 alert('GL Updated successfully');
+//                 window.location.reload();
+//             },
+//             error: function(xhr, status, error) {
+                
+//                 alert('An error occurred: ' + error);
+//             }
+//         });
+//     });
+
+//     // Submit updated data to server
+//     $("#editGLForm").on("submit", function (e) {
+//         e.preventDefault();
+//         let formData = new FormData(this);
+
+//         $.ajax({
+//             url: "gl_update.php",
+//             type: "POST",
+//             data: formData,
+//             processData: false,
+//             contentType: false,
+//             success: function (response) {
+//                 alert( "GL updated successfully!"); // Show success/error message
+//                 location.reload(); // Refresh the page
+//             },
+//             error: function (xhr, status, error) {
+//                 console.error("Error updating GL:", error);
+//             }
+//         });
+//     });
+// });
 
 
 //////////// GL Ends ////////////

@@ -56,22 +56,39 @@ if(isset($_SESSION['userAuth'])&& $_SESSION['userAuth']!=""){
                             <?php foreach($result as $row2){?>
                                 <tr>
                                     <td><?php echo $row2['acc_id'];?></td>
-                                    <td><?php echo $row2['a_type'];?></td>
-                                    <td><?php echo $row2['ab_name'];?></td>
-                                    <td><?php echo $row2['u_name'];?></td>
-                                    <td><?php echo $row2['acc_num'];?></td>
-                                    <td><?php echo $row2['acc_ammo'];?></td>
-                                    <td><?php echo $row2['acc_type'];?></td>
+                                    <td><?php echo htmlspecialchars( $row2['a_type']);?></td>
+                                    <td><?php echo htmlspecialchars( $row2['ab_name']);?></td>
+                                    <td><?php echo htmlspecialchars( $row2['u_name']);?></td>
+                                    <td><?php echo htmlspecialchars( $row2['acc_num']);?></td>
+                                    <td><?php echo htmlspecialchars( $row2['acc_ammo']);?></td>
+                                    <td><?php echo htmlspecialchars( $row2['acc_type']);?></td>
                                     <td>
-                                        <a href="toggle_acc.php?id=<?php echo $row2['acc_id']; ?>"<button type="button" class="btn btn-primary btn-sm" data-toggle="button" aria-pressed="false" autocomplete="off">
-                                        </button>
-                                            <?php echo ($row2['acc_status'] == 'active') ? 'Inactive' : 'Activate'; ?>
-                                        </a>
+                                       
+                                      <a href="toggle_acc.php?id=<?php echo htmlspecialchars($row2['acc_id']); ?>" class="btn btn-sm <?php echo ($row2['acc_status'] == 'active') ? 'btn-success' : 'btn-secondary'; ?>">
+                                    <?php echo ($row2['acc_status'] == 'active') ? 'Active' : 'Inactive'; ?>
+                                </a>   
                                     </td>
                                     <td>   
-                    <button class="btn btn-info btn-sm viewAcc" data-id="<?php echo $row2['acc_id']; ?>" data-bs-toggle="modal" data-bs-target="#viewAccModal"><i class="bi bi-receipt"></i></button>
+                    <button class="btn btn-info btn-sm viewAcc"
+                     data-id="<?php echo $row2['acc_id']; ?>"
+                     data-atype="<?php echo $row2['a_type']; ?>"
+                     data-name="<?php echo $row2['ab_name']; ?>"
+                     data-uid="<?php echo $row2['u_id']; ?>"
+                     data-num="<?php echo $row2['acc_num']; ?>"
+                     data-ammo="<?php echo $row2['acc_ammo']; ?>"
+                     data-type="<?php echo $row2['acc_type']; ?>"
+                     
+                     data-bs-toggle="modal" data-bs-target="#viewAccModal"><i class="bi bi-receipt"></i></button>
                    
-                     <button class="btn btn-warning btn-sm editAcc" data-id="<?php echo $row2['acc_id']; ?>" data-bs-toggle="modal" data-bs-target="#editAccModal"><i class="bi bi-tools"></i></button>
+                     <button class="btn btn-warning btn-sm editAcc"
+                      data-id="<?php echo $row2['acc_id']; ?>"
+                      data-atype="<?php echo $row2['a_type']; ?>"
+                     data-name="<?php echo $row2['ab_name']; ?>"
+                     data-uid="<?php echo $row2['u_id']; ?>"
+                     data-num="<?php echo $row2['acc_num']; ?>"
+                     data-ammo="<?php echo $row2['acc_ammo']; ?>"
+                     data-type="<?php echo $row2['acc_type']; ?>"
+                      data-bs-toggle="modal" data-bs-target="#editAccModal"><i class="bi bi-tools"></i></button>
                      
                      <button class="btn btn-danger btn-sm deleteAcc" data-id="<?php echo $row2['acc_id'];?>" data-bs-toggle="modal" data-bs-target="#deleteAccModal"><i class="bi bi-trash"></i></button>
                     </td>
@@ -98,7 +115,7 @@ $query1 = "SELECT * FROM user_tbl";
       </div>
       <div class="modal-body">
         <form id="accountForm">
-              <!-- Name -->
+              <!-- Account Holder's Name -->
               <div class="mb-3">
                 <label for="u_id">Account Holder's Name</label>
                 <select class="form-control" id="u_id" name="u_id" required>
@@ -161,34 +178,67 @@ $query1 = "SELECT * FROM user_tbl";
 
 
 <!-- View Account Modal -->
-    <div class="modal fade" id="viewAccModal" tabindex="-1" aria-labelledby="viewAccModalLabel" aria-hidden="true">
+    
+ <div class="modal fade" id="viewAccModal" tabindex="-1" aria-labelledby="viewAccModalLabel" aria-hidden="true">
     <div class="modal-dialog">
+     
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="viewAccModalLabel">Account Details</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h5 class="modal-title" id="viewAccModalLabel">view Account</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" ></button>
             </div>
-            <div class="modal-body" id="accountDetails">
-                 <!-- Account details will be loaded here dynamically -->
-            </div>
-        </div>
+            <div class="modal-body">
+                    <input type="hidden" id="view_acc_id" name="acc_id">
+                    <div class="mb-3">
+                        <label for="view_u_id">Account Holder's Name</label>
+                 <select class="form-control" id="view_u_id" name="u_id" readonly>
+                  <option value = "<?php echo $row2['u_id']?>"><?php echo $row2['u_name']?> </option>
+                 
+                </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="view_acc_num" class="form-label">Account Number</label>
+                        <input type="text" class="form-control" id="view_acc_num" name="acc_num" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="view_ab_name" class="form-label">Account Name</label>
+                        <input type="text" class="form-control" id="view_ab_name" name="ab_name" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="view_acc_ammo" class="form-label">Amount</label>
+                        <input type="text" class="form-control" id="view_acc_ammo" name="acc_ammo" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="view_acc_type" class="form-label">Account Type</label>
+                        <input type="text" class="form-control" id="view_acc_type" name="acc_type" readonly>
+                            
+                    </div>
+                    </div>
+                    <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>                   
+                   </div>
+                    </div>
+                    
+                
     </div>
 </div>
+
 <?php
 $query3 = "SELECT * FROM user_tbl";
                 $stmt = $pdo->prepare($query1);
                 $row3 = $stmt->execute();
 ?>
+
 <!-- Edit Account Modal -->
  <div class="modal fade" id="editAccModal" tabindex="-1" aria-labelledby="editAccModalLabel" aria-hidden="true">
     <div class="modal-dialog">
+      <form action="update_account.php" method="POST">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="editAccModalLabel">Edit Account</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" ></button>
             </div>
             <div class="modal-body">
-                <form id="editAccForm">
                     <input type="hidden" id="edit_acc_id" name="acc_id">
                     <div class="mb-3">
                         <label for="edit_u_id">Account Holder's Name</label>
@@ -220,12 +270,13 @@ $query3 = "SELECT * FROM user_tbl";
                              <option value="current">Current</option>
                         </select>
                     </div>
+                    </div>
                     <div class="modal-footer">
                     <button type="submit" class="btn btn-primary">Update Account</button>
                     </div>
+                    </div>
+                    
                 </form>
-            </div>
-        </div>
     </div>
 </div>
 
@@ -253,7 +304,70 @@ $query3 = "SELECT * FROM user_tbl";
 
 
 <?php
+include('../includes/footer.php'); ?>
 
-include('../includes/footer.php');
-}
+<script>
+  document.addEventListener('DOMContentLoaded', function(){
+    const editButtons = document.querySelectorAll('.editAcc');
+    editButtons.forEach(button =>{
+      button.addEventListener('click',()=>{
+
+        document.getElementById('edit_acc_id').value=button.getAttribute('data-id');
+
+        const abname = button.getAttribute('data-name');
+        document.getElementById('edit_ab_name').value=abname;
+        
+        const uid = button.getAttribute('data-uid');
+        document.getElementById('edit_u_id').value=uid;
+        
+        const num = button.getAttribute('data-num');
+        document.getElementById('edit_acc_num').value=num;
+        
+        const ammo = button.getAttribute('data-ammo');
+        document.getElementById('edit_acc_ammo').value=ammo;
+        
+        const type = button.getAttribute('data-type');
+        document.getElementById('edit_acc_type').value=type;
+
+      });
+    });
+  });
+  document.addEventListener('DOMContentLoaded', function(){
+    const viewButtons = document.querySelectorAll('.viewAcc');
+    viewButtons.forEach(button =>{
+      button.addEventListener('click',()=>{
+
+        document.getElementById('view_acc_id').value=button.getAttribute('data-id');
+
+        const abname = button.getAttribute('data-name');
+        document.getElementById('view_ab_name').value=abname;
+        
+        const uid = button.getAttribute('data-uid');
+        document.getElementById('view_u_id').value=uid;
+        
+        const num = button.getAttribute('data-num');
+        document.getElementById('view_acc_num').value=num;
+        
+        const ammo = button.getAttribute('data-ammo');
+        document.getElementById('view_acc_ammo').value=ammo;
+        
+        const type = button.getAttribute('data-type');
+        document.getElementById('view_acc_type').value=type;
+
+      });
+    });
+  });
+
+
+</script>
+
+<?php
+  }else{
+
+echo '<script>
+alert("Not Authorised!");
+window.location.href = "../index.php";
+</script>';
+
+ }    
 ?>

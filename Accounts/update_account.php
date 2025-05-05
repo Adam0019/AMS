@@ -1,19 +1,6 @@
 <?php
 require_once('../config/dbcon.php');
-header('Content-Type: application/json'); // Ensure the response is JSON
 
-if($_SERVER['REQUEST_METHOD'] !== 'POST'){
-    echo json_encode(["status"=>"error", "message"=>"Invalid request method."]);
-    exit;
-}
-
-$required_fields = ['acc_id', 'ab_name', 'u_id', 'acc_num', 'acc_ammo', 'acc_type'];
-foreach($required_fields as $field){
-    if(!isset($_POST[$field]) || empty(trim($_POST[$field]))){
-        echo json_encode(["status"=>"error", "message"=>"Missing or empty field: $field"]);
-        exit;
-    }
-}
  
 $acc_id = $_POST['acc_id'];
 $ab_name = $_POST['ab_name'];

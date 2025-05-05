@@ -1,9 +1,7 @@
 <?php
-include('../includes/header.php');
-if(isset($_SESSION['userAuth'])&& $_SESSION['userAuth']!="")
 
-{
-    
+include('../includes/header.php');
+if(isset($_SESSION['userAuth'])&& $_SESSION['userAuth']!=""){ 
     include('../includes/sidebar.php');
 ?>
 <main class="mt-3 pt-3">
@@ -32,8 +30,8 @@ if(isset($_SESSION['userAuth'])&& $_SESSION['userAuth']!="")
     <!-- User Table -->
      <?php 
      try{
-        $querry = "SELECT * FROM user_tbl ORDER BY u_id";
-        $stmt = $pdo->prepare($querry);
+        $query = "SELECT * FROM user_tbl ORDER BY u_id";
+        $stmt = $pdo->prepare($query);
         $stmt->execute();
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
      }catch (PDOException $e){
@@ -61,21 +59,36 @@ if(isset($_SESSION['userAuth'])&& $_SESSION['userAuth']!="")
                 <?php foreach($result as $row){?>
                 <tr>
                     <td><?php echo $row['u_id'];?></td>
-                    <td><?php echo $row['u_name'];?></td>
-                    <td><?php echo $row['u_email'];?></td>
-                    <td><?php echo $row['u_phone'];?></td>
-                    <td><?php echo $row['username'];?></td>
-                    <td><?php echo $row['role'];?></td>
+                    <td><?php echo htmlspecialchars( $row['u_name']);?></td>
+                    <td><?php echo htmlspecialchars( $row['u_email']);?></td>
+                    <td><?php echo htmlspecialchars( $row['u_phone']);?></td>
+                    <td><?php echo htmlspecialchars( $row['username']);?></td>
+                    <td><?php echo htmlspecialchars( $row['role']);?></td>
                     <td>
-                       <a href="toggle_user.php?id=<?php echo $row['u_id']; ?>"<button type="button" class="btn btn-primary btn-sm" data-toggle="button" aria-pressed="false" autocomplete="off">
-                                        </button>
-                                            <?php echo ($row['u_status'] == 'active') ? 'Inactive' : 'Activate'; ?>
-                                        </a>
+                         <a href="toggle_user.php?id=<?php echo htmlspecialchars($row['u_id']); ?>" class="btn btn-sm <?php echo ($row['u_status'] == 'active') ? 'btn-success' : 'btn-secondary'; ?>">
+                                    <?php echo ($row['u_status'] == 'active') ? 'Active' : 'Inactive'; ?>
+                                </a>
                     </td>
                     <td>   
-                    <button class="btn btn-info btn-sm viewUser" data-id="<?php echo $row['u_id']; ?>" data-bs-toggle="modal" data-bs-target="#viewUserModal"><i class="bi bi-receipt"></i></button>
+                    <button class="btn btn-info btn-sm viewUser"
+                     data-id="<?php echo $row['u_id']; ?>"
+                     data-name="<?php echo $row['u_name'];?>"
+                     data-email="<?php echo $row['u_email'];?>"
+                     data-phone="<?php echo $row['u_phone'];?>"
+                     data-username="<?php echo $row['username'];?>"
+                     data-password="<?php echo $row['password'];?>"
+                     data-role="<?php echo $row['role'];?>"
+                     data-bs-toggle="modal" data-bs-target="#viewUserModal"><i class="bi bi-receipt"></i></button>
                    
-                     <button class="btn btn-warning btn-sm editUser" data-id="<?php echo $row['u_id']; ?>" data-bs-toggle="modal" data-bs-target="#editUserModal"><i class="bi bi-tools"></i></button>
+                     <button class="btn btn-warning btn-sm editUser"
+                      data-id="<?php echo $row['u_id']; ?>"
+                      data-name="<?php echo $row['u_name'];?>"
+                     data-email="<?php echo $row['u_email'];?>"
+                     data-phone="<?php echo $row['u_phone'];?>"
+                     data-username="<?php echo $row['username'];?>"
+                     data-password="<?php echo $row['password'];?>"
+                     data-role="<?php echo $row['role'];?>"
+                      data-bs-toggle="modal" data-bs-target="#editUserModal"><i class="bi bi-tools"></i></button>
 
                      <button class="btn btn-danger btn-sm deleteUser" data-id="<?php echo $row['u_id'];?>" data-bs-toggle="modal" data-bs-target="#deleteUserModal"><i class="bi bi-trash"></i></button>
                     </td>
@@ -140,17 +153,45 @@ if(isset($_SESSION['userAuth'])&& $_SESSION['userAuth']!="")
 
 <div class="modal fade" id="viewUserModal" tabindex="-1" aria-labelledby="viewUserModalLabel" aria-hidden="true">
     <div class="modal-dialog">
+        
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="viewUserModalLabel">User Details</h5>
+                <h5 class="modal-title" id="viewUserModalLabel">View User</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body" id="userDetails">
-                 <!-- User details will be loaded here dynamically -->
+            <div class="modal-body">
+                    <input type="hidden" id="view_u_id" name="u_id">
+                    <div class="mb-3">
+                        <label for="u_name" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="view_u_name" name="u_name" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="u_email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="view_u_email" name="u_email" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="u_phone" class="form-label">Phone</label>
+                        <input type="text" class="form-control" id="view_u_phone" name="u_phone" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="text" class="form-control" id="view_password" name="password" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="role" class="form-label">Role</label>
+                        <input type="text" class="form-control" id="view_role" name="role"readonly>
+                    </div>
+                    </div>
+                    <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
             </div>
-        </div>
+               
+       
     </div>
 </div>
+
+
 
 
 
@@ -158,43 +199,44 @@ if(isset($_SESSION['userAuth'])&& $_SESSION['userAuth']!="")
 <!-- Edit User Modal -->
 <div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
     <div class="modal-dialog">
+        <form  action="update_user.php" method="POST">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="editUserModalLabel">Edit User</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="editUserForm">
                     <input type="hidden" id="edit_u_id" name="u_id">
                     <div class="mb-3">
-                        <label for="edit_u_name" class="form-label">Name</label>
+                        <label for="u_name" class="form-label">Name</label>
                         <input type="text" class="form-control" id="edit_u_name" name="u_name" required>
                     </div>
                     <div class="mb-3">
-                        <label for="edit_u_email" class="form-label">Email</label>
+                        <label for="u_email" class="form-label">Email</label>
                         <input type="email" class="form-control" id="edit_u_email" name="u_email" required>
                     </div>
                     <div class="mb-3">
-                        <label for="edit_u_phone" class="form-label">Phone</label>
+                        <label for="u_phone" class="form-label">Phone</label>
                         <input type="text" class="form-control" id="edit_u_phone" name="u_phone" required>
                     </div>
                     <div class="mb-3">
-                        <label for="edit_password" class="form-label">Password</label>
+                        <label for="password" class="form-label">Password</label>
                         <input type="text" class="form-control" id="edit_password" name="password" required>
                     </div>
                     <div class="mb-3">
-                        <label for="edit_role" class="form-label">Role</label>
+                        <label for="role" class="form-label">Role</label>
                         <select class="form-control" id="edit_role" name="role">
                             <option value="User" selected>User</option>
                             <option value="Admin">Admin</option>
                         </select>
                     </div>
+                    </div>
                     <div class="modal-footer">
                     <button type="submit" class="btn btn-primary">Update User</button>
                     </div>
-                </form>
             </div>
-        </div>
+                </form>
+       
     </div>
 </div>
 
@@ -223,11 +265,65 @@ if(isset($_SESSION['userAuth'])&& $_SESSION['userAuth']!="")
 
 
 <?php
-include('../includes/footer.php');
-}
-else{
+include('../includes/footer.php');?>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function(){
+        const editButtons = document.querySelectorAll('.editUser');
+        editButtons.forEach(button =>{
+            button.addEventListener('click', ()=>{
+            document.getElementById('edit_u_id').value=button.getAttribute('data-id');
+
+            const u_name = button.getAttribute('data-name');
+            document.getElementById('edit_u_name').value= u_name;
+            
+            const u_email = button.getAttribute('data-email');
+            document.getElementById('edit_u_email').value= u_email;
+           
+            const u_phone = button.getAttribute('data-phone');
+            document.getElementById('edit_u_phone').value= u_phone;
+            
+            const password = button.getAttribute('data-password');
+            document.getElementById('edit_password').value= password;
+            
+            const role = button.getAttribute('data-role');
+            document.getElementById('edit_role').value= role;
+              
+        });
+
+        });
+    });
+    document.addEventListener('DOMContentLoaded', function(){
+        const viewButtons = document.querySelectorAll('.viewUser');
+        viewButtons.forEach(button =>{
+            button.addEventListener('click', ()=>{
+            document.getElementById('view_u_id').value=button.getAttribute('data-id');
+
+            const u_name = button.getAttribute('data-name');
+            document.getElementById('view_u_name').value= u_name;
+            
+            const u_email = button.getAttribute('data-email');
+            document.getElementById('view_u_email').value= u_email;
+           
+            const u_phone = button.getAttribute('data-phone');
+            document.getElementById('view_u_phone').value= u_phone;
+            
+            const password = button.getAttribute('data-password');
+            document.getElementById('view_password').value= password;
+            
+            const role = button.getAttribute('data-role');
+            document.getElementById('view_role').value= role;
+              
+        });
+
+        });
+    });
+</script>
+
+<?php
+}else{
    echo '<script>
 alert("Not Authorised!");
 window.location.href = "../index.php";
 </script>';
-}
+}?>

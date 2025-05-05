@@ -1,33 +1,31 @@
 <?php
 
 require_once('../config/dbcon.php');
-header('Content-Type: application/json'); // Ensure the response is JSON
 
-if(!isset($_GET['id']) || empty($_GET['id'])){
-    echo json_encode(["error"=>"Invalid request"]);
-    exit;
-}
-
-$accId = filter_var($_GET['id'], FILTER_VALIDATE_INT);
-
-if(!$accId){
-    echo json_encode(["error"=>"Invalid account ID"]);
-    exit;
-}try{
+if(isset($_POST['acc_id'])) {
+    $acc_id = $_POST['acc_id'];
+    
+try{
 
 
     // Fetch account details from the database
-    $query = "SELECT * FROM account_tbl inner join user_tbl on account_tbl.u_id = user_tbl.u_id WHERE acc_id = :id";
+    $query = "SELECT * FROM account_tbl inner join user_tbl on account_tbl.u_id = user_tbl.u_id WHERE acc_id = :acc_id";
     $stmt = $pdo->prepare($query);
-    $stmt->bindParam(':id', $accId, PDO::PARAM_INT);
+    $stmt->bindParam(':acc_id', $acc_id );
     $stmt->execute();
     $account = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if($account){
-        echo json_encode($account);
-    }else{
-        echo json_encode(["error"=>"Account not found"]);
-    }
+     $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        // Return data as JSON
+        header('Content-Type: application/json');
+        echo json_encode($result);
 }catch(PDOException $e){
-    echo json_encode(["error"=>"Error fetching account details"]);
-}?>
+  header('Content-Type: application/json');
+        echo json_encode(['error' => 'Database error: ' . $e->getMessage()]);}
+} else {
+    // Return error if ID is not provided
+    header('Content-Type: application/json');
+    echo json_encode(['error' => 'Account ID not provided']);
+}
+?>

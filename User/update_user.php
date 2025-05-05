@@ -1,21 +1,7 @@
 <?php
 require_once('../config/dbcon.php');
 
-// Set the content type to JSON
-header('Content-Type: application/json');
 
-if ($_SERVER["REQUEST_METHOD"] !== "POST") {
-    echo json_encode(["error" => "Invalid request method"]);
-    exit;
-}
-// Validate input data
-$required_fields = ['u_id', 'u_name', 'u_email', 'u_phone', 'password', 'role'];
-foreach ($required_fields as $field) {
-    if (!isset($_POST[$field]) || empty(trim($_POST[$field]))) {
-        echo json_encode(["error" => "Missing or empty field: $field"]);
-        exit;
-    }
-}
 
      $u_id= $_POST['u_id'];
      $u_name = $_POST['u_name'];
