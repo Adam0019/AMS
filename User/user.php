@@ -161,25 +161,35 @@ if(isset($_SESSION['userAuth'])&& $_SESSION['userAuth']!=""){
             </div>
             <div class="modal-body">
                     <input type="hidden" id="view_u_id" name="u_id">
-                    <div class="mb-3">
-                        <label for="u_name" class="form-label">Name</label>
-                        <input type="text" class="form-control" id="view_u_name" name="u_name" readonly>
+                    <div class="mb-3 row">
+                        <label for="u_name" class="col-sm-2 col-form-label fw-bold">Name:</label>
+                        <div class="col-sm-5">
+                       <p class="form-control-plaintext" id="view_u_name" name="u_name"></p>
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label for="u_email" class="form-label">Email</label>
-                        <input type="email" class="form-control" id="view_u_email" name="u_email" readonly>
+                    <div class="mb-3 row">
+                <label for="u_email" class="col-sm-2 col-form-label fw-bold">Email:</label>
+                 <div class="col-sm-5">
+                   <p class="form-control-plaintext" id="view_u_email" name="u_email"></p>
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label for="u_phone" class="form-label">Phone</label>
-                        <input type="text" class="form-control" id="view_u_phone" name="u_phone" readonly>
+                    <div class="mb-3 row">
+                <label for="u_phone" class="col-sm-2 col-form-label fw-bold">Phone:</label>
+                 <div class="col-sm-5">
+                    <p class="form-control-plaintext" id="view_u_phone" name="u_phone"></p>
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label for="password" class="form-label">Password</label>
-                        <input type="text" class="form-control" id="view_password" name="password" readonly>
+                    <div class="mb-3 row">
+            <label for="password" class="col-sm-2 col-form-label fw-bold">Password:</label>
+                        <div class="col-sm-5">
+                   <p class="form-control-plaintext" id="view_password" name="password"></p>
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label for="role" class="form-label">Role</label>
-                        <input type="text" class="form-control" id="view_role" name="role"readonly>
+                    <div class="mb-3 row">
+                    <label for="role" class="col-sm-2 col-form-label fw-bold">Role:</label>
+                        <div class="col-sm-5">
+                       <p class="form-control-plaintext" id="view_role" name="role"></p>
+                        </div>
                     </div>
                     </div>
                     <div class="modal-footer">
@@ -300,19 +310,19 @@ include('../includes/footer.php');?>
             document.getElementById('view_u_id').value=button.getAttribute('data-id');
 
             const u_name = button.getAttribute('data-name');
-            document.getElementById('view_u_name').value= u_name;
+            document.getElementById('view_u_name').textContent= u_name;
             
             const u_email = button.getAttribute('data-email');
-            document.getElementById('view_u_email').value= u_email;
+            document.getElementById('view_u_email').textContent= u_email;
            
             const u_phone = button.getAttribute('data-phone');
-            document.getElementById('view_u_phone').value= u_phone;
+            document.getElementById('view_u_phone').textContent= u_phone;
             
             const password = button.getAttribute('data-password');
-            document.getElementById('view_password').value= password;
+            document.getElementById('view_password').textContent= password;
             
             const role = button.getAttribute('data-role');
-            document.getElementById('view_role').value= role;
+            document.getElementById('view_role').textContent= role;
               
         });
 

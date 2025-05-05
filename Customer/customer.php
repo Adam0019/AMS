@@ -173,21 +173,29 @@ if (isset($_SESSION['userAuth']) && $_SESSION['userAuth']!="" )
             </div>
             <div class="modal-body">
                  <input type="hidden" id="view_c_id" name="c_id">
-                <div class="mb-3">
-                    <label for="c_name" class="form-label">Name</label>
-                    <input type="text" class="form-control" id="view_c_name" name="c_name"  readonly>
+                <div class="mb-3 row">
+                    <label for="c_name" class="col-sm-2 col-form-label fw-bold">Name:</label>
+                     <div class="col-sm-5">
+                    <p class="form-control-plaintext" id="view_c_name" name="c_name"></p>
+                    </div>
                 </div>
-                <div class="mb-3">
-                    <label for="c_email" class="form-label">Email</label>
-                    <input type="email" class="form-control" id="view_c_email" name="c_email"  readonly>
+                <div class="mb-3 row">
+                    <label for="c_email" class="col-sm-2 col-form-label fw-bold">Email:</label>
+                    <div class="col-sm-5">
+                    <p class="form-control-plaintext" id="view_c_email" name="c_email"></p>
                 </div>
-                <div class="mb-3">
-                    <label for="c_phone" class="form-label">Phone</label>
-                    <input type="text" class="form-control" id="view_c_phone" name="c_phone" readonly>
                 </div>
-                <div class="mb-3">
-                    <label for="c_role" class="form-label">Role</label>
-                    <input type="text" class="form-control" id="view_c_role" name="c_role" readonly>
+                <div class="mb-3 row">
+                    <label for="c_phone" class="col-sm-2 col-form-label fw-bold">Phone:</label>
+                    <div class="col-sm-5">
+                   <p class="form-control-plaintext" id="view_c_phone" name="c_phone"></p>
+                </div>
+                </div>
+                <div class="mb-3 row">
+                    <label for="c_role" class="col-sm-2 col-form-label fw-bold">Role:</label>
+                    <div class="col-sm-5">
+                   <p class="form-control-plaintext" id="view_c_role" name="c_role"></p>
+                </div>
                 </div>
             </div>
             <div class="modal-footer">
@@ -299,16 +307,16 @@ include('../includes/footer.php');?>
 
                 // Set Name input value
                 const c_name = button.getAttribute('data-name');
-                document.getElementById('view_c_name').value= c_name;
+                document.getElementById('view_c_name').textContent = c_name;
                 // Set Email input value
                 const c_email = button.getAttribute('data-email');
-                document.getElementById('view_c_email').value= c_email;
+                document.getElementById('view_c_email').textContent = c_email;
                 // Set Phone input value
                 const c_phone = button.getAttribute('data-phone');
-                document.getElementById('view_c_phone').value= c_phone;
+                document.getElementById('view_c_phone').textContent = c_phone;
                 // Set Roll input value
                 const c_role = button.getAttribute('data-type');
-                document.getElementById('view_c_role').value= c_role;
+                document.getElementById('view_c_role').textContent = c_role;
 
                 
             });
