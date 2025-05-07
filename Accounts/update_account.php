@@ -19,6 +19,8 @@ try{
     $stmt->bindParam(':acc_type', $acc_type, PDO::PARAM_STR);
     if($stmt->execute()){
         echo json_encode(["status"=>"success", "message"=>"Account updated successfully!"]);
+        header("location: account.php");
+        // exit();
     }else{
         echo json_encode(["status"=>"error", "message"=>"Error updating account."]);
     }
@@ -27,3 +29,5 @@ try{
     echo json_encode(["status"=>"error", "message"=>"Database error: ".$e->getMessage()]);
 }
 ?>
+
+

@@ -22,6 +22,8 @@ try {
 
     if ($stmt->execute()) {
         echo json_encode(["success" => "Customer updated successfully!"]);
+           header("location: customer.php");
+        // exit();
     } else {
         echo json_encode(["error" => "Failed to update customer."]);
     }

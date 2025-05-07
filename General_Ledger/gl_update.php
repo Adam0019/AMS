@@ -19,6 +19,8 @@ try {
 
     if ($stmt->execute()) {
         echo json_encode(["success" => "GL updated successfully!"]);
+           header("location: gl_title.php");
+        // exit();
     } else {
         echo json_encode(["error" => "Failed to update GL."]);
     }

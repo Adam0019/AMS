@@ -21,6 +21,8 @@ try {
 
     if ($stmt->execute()) {
         echo json_encode(["success" => "User updated successfully!"]);
+           header("location: user.php");
+        // exit();
     } else {
         echo json_encode(["error" => "Error updating user."]);
     }

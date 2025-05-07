@@ -253,11 +253,11 @@ $query3 = "SELECT * FROM user_tbl";
                     </div>
                     <div class="mb-3">
                         <label for="edit_acc_num" class="form-label">Account Number</label>
-                        <input type="text" class="form-control" id="edit_acc_num" name="acc_num" required>
+                        <input type="text" class="form-control" id="edit_acc_num" name="acc_num" >
                     </div>
                     <div class="mb-3">
-                        <label for="edit_ab_name" class="form-label">Account Name</label>
-                        <input type="text" class="form-control" id="edit_ab_name" name="ab_name" required>
+                        <label for="edit_ab_name" class="form-label">Bank Name</label>
+                        <input type="text" class="form-control" id="edit_ab_name" name="ab_name" >
                     </div>
                     <div class="mb-3">
                         <label for="edit_acc_ammo" class="form-label">Amount</label>
