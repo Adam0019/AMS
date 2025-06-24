@@ -595,6 +595,69 @@ $(document).ready(function() {
 
 //////////// GL Ends ////////////
 
+////////// CREDIT STARTS /////////
+// $(document).ready(function(){
+//     $('#creditForm').on('submit', function(e){
+//         e.preventDefault();
+//         console.log('credit working');
+
+//         $.ajax({
+//             url:'../Credit/store_credit.php',
+//             type:'POST',
+//             data: $(this).serialize(),
+//             success:function(response){
+//                 $('#creditModal').modal('hide');
+//                 alert('Customer created successfully!');
+//                 window.location.reload();
+//             },
+//             error:function(xhr,status,console,error){
+//                 alert('An error occured: ' + error);
+//             }
+//         })
+//     });
+// });
+
+    //fetch customer
+     $('#c_id').on('change', function() {
+        var cus_id = $(this).val();  
+        console.log('hello');
+        if(c_id){
+            $.ajax({
+                url:'../Credit/fetchCustomer.php',
+                type:'POST',
+                data:{c_id:c_id},
+                success:function(response){
+                    $('#c_id').html(response);},
+                error:function(xhr,status,error){
+                    console.error("Error fetching Customer data:", error);
+                }
+            });
+        }else{
+            $('#c_id').html('<option value="">Select Customer</option>');
+        }
+    });
+    //fetch GL
+     $('#gl_id').on('change', function() {
+        var gls_id = $(this).val();  
+        console.log('hello');
+        if(gl_id){
+            $.ajax({
+                url:'../Credit/fetchGL.php',
+                type:'POST',
+                data:{gl_id:gl_id},
+                success:function(response){
+                    $('#gl_id').html(response);},
+                error:function(xhr,status,error){
+                    console.error("Error fetching GL data:", error);
+                }
+            });
+        }else{
+            $('#gl_id').html('<option value="">Select GL</option>');
+        }
+    });
+////////// CREDIT ENDS /////////
+
+
     </script>
 
 

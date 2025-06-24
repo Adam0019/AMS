@@ -60,6 +60,9 @@
                             <li class="sidebar-item">
                                 <a href="../BalanceSheet/balance_sheet.php" class="sidebar-link">Balance Sheet</a>
                             </li>
+                            <li class="sidebar-item">
+                                <a href="../test/test.php" class="sidebar-link">Balance Sheet</a>
+                            </li>
                         </ul>
                     </li>
                     <!-- <li class="sidebar-item">

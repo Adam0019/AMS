@@ -210,7 +210,8 @@ try {
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 <button type="submit" class="btn btn-primary">Save</button>
             </div>
-        </form>
+        <input type="hidden" name="csrf_token" id="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+</form>
       </div>
     </div>
   </div>
@@ -413,7 +414,8 @@ try {
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
             <button type="submit" class="btn btn-primary">Update</button>
           </div>
-        </form>
+        <input type="hidden" name="csrf_token" id="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+</form>
       </div>
     </div>
   </div>
@@ -480,35 +482,18 @@ document.getElementById('creditForm').addEventListener('submit', function(e) {
     }
 
     // Validate customer selection
-   // Validate customer selection
-const customerId = document.getElementById('c_id').value;
-
-if (customerId === 'other') {
-    const customerName = document.querySelector('input[name="c_name"]').value;
-    const customerEmail = document.querySelector('input[name="c_email"]').value;
-    const customerPhone = document.querySelector('input[name="c_phone"]').value;
-    const customerAddress = document.querySelector('input[name="c_address"]').value;
-    const customerRole = document.querySelector('select[name="c_role"]').value;
+    const customerId = document.getElementById('c_id').value;
+    const customerName = document.getElementById('c_name').value;
+    const customerEmail = document.getElementById('c_email').value;
+    const customerPhone = document.getElementById('c_phone').value;
+    const customerAddress = document.getElementById('c_address').value;
+    const customerRole = document.getElementById('c_role').value;
+    const customerType = customerRole;
     
-    if (!customerName.trim() || !customerEmail.trim() || !customerPhone.trim() || !customerAddress.trim() || !customerRole.trim()) {
-        alert('Please fill all customer details');
+    if (customerId === 'other' && customerName.trim() === '' &&  customerEmail.trim() ==='' && customerPhone.trim()===''&& customerAddress.trim() === ''&& customerType.trim()==='') {
+        alert('Please enter customer name for new customer');
         return;
     }
-    
-    // Email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(customerEmail)) {
-        alert('Please enter a valid email address');
-        return;
-    }
-    
-    // Phone validation (basic)
-    const phoneRegex = /^[0-9]{10,}$/;
-    if (!phoneRegex.test(customerPhone.replace(/\D/g, ''))) {
-        alert('Please enter a valid phone number');
-        return;
-    }
-}
     
     // // Validate purpose selection
     const GLId = document.getElementById('gl_id').value;
@@ -550,6 +535,8 @@ if (customerId === 'other') {
     // Proceed with form submission
     const form = e.target;
     const formData = new FormData(form);
+    formData.append('submit', '1');
+    formData.append('csrf_token', document.getElementById('csrf_token').value);
 
     fetch('store_credit.php', {
         method: 'POST',
@@ -572,15 +559,21 @@ if (customerId === 'other') {
     // Show Cheque Modal when Cheque is selected in Add Credit
     document.getElementById('credit_mode').addEventListener('change', function () {
         if (this.value === 'Cheque') {
-            const chequeModal = new bootstrap.Modal(document.getElementById('chequeModal'));
+            const modalEl = document.getElementById('chequeModal');
+            if (modalEl) {
+                const chequeModal = new bootstrap.Modal(modalEl);
             chequeModal.show();
+            }
         }
     });
     // Show Cheque Modal when Cheque is selected in Add Credit
     document.getElementById('c_id').addEventListener('change', function () {
         if (this.value === 'other') {
-            const customerModal = new bootstrap.Modal(document.getElementById('customerModal'));
+            const modalEl = document.getElementById('customerModal');
+            if (modalEl) {
+                const customerModal = new bootstrap.Modal(modalEl);
             customerModal.show();
+            }
         }
     });
 
@@ -655,6 +648,8 @@ if (customerId === 'other') {
         
         const form = e.target;
         const formData = new FormData(form);
+    formData.append('submit', '1');
+    formData.append('csrf_token', document.getElementById('csrf_token').value);
         
         fetch('updateCredit.php', {
             method:'POST',
@@ -697,7 +692,7 @@ if (customerId === 'other') {
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
                 },
-                body: 'credit_id=' + encodeURIComponent(creditId) + '&csrf_token=' + encodeURIComponent('<?php echo $_SESSION['csrf_token']; ?>')
+                body: 'credit_id=' + encodeURIComponent(creditId) + '&csrf_token=' + encodeURIComponent(document.getElementById('csrf_token').value)
             })
             .then(response => {
                 if (!response.ok) {

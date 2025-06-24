@@ -480,35 +480,13 @@ document.getElementById('creditForm').addEventListener('submit', function(e) {
     }
 
     // Validate customer selection
-   // Validate customer selection
-const customerId = document.getElementById('c_id').value;
-
-if (customerId === 'other') {
-    const customerName = document.querySelector('input[name="c_name"]').value;
-    const customerEmail = document.querySelector('input[name="c_email"]').value;
-    const customerPhone = document.querySelector('input[name="c_phone"]').value;
-    const customerAddress = document.querySelector('input[name="c_address"]').value;
-    const customerRole = document.querySelector('select[name="c_role"]').value;
+    // const customerId = document.getElementById('c_id').value;
+    // const customerName = document.getElementById('c_name').value;
     
-    if (!customerName.trim() || !customerEmail.trim() || !customerPhone.trim() || !customerAddress.trim() || !customerRole.trim()) {
-        alert('Please fill all customer details');
-        return;
-    }
-    
-    // Email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(customerEmail)) {
-        alert('Please enter a valid email address');
-        return;
-    }
-    
-    // Phone validation (basic)
-    const phoneRegex = /^[0-9]{10,}$/;
-    if (!phoneRegex.test(customerPhone.replace(/\D/g, ''))) {
-        alert('Please enter a valid phone number');
-        return;
-    }
-}
+    // if (customerId === 'other' && customerName.trim() === '') {
+    //     alert('Please enter customer name for new customer');
+    //     return;
+    // }
     
     // // Validate purpose selection
     const GLId = document.getElementById('gl_id').value;
@@ -533,19 +511,19 @@ if (customerId === 'other') {
         }
     }
 
-    // const customerMode = document.getElementById('c_id').value;
-    // if(customerMode === "other"){
-    //     const customerName = document.querySelector('input[name="c_name"]').value
-    //     const customerEmail = document.querySelector('input[name="c_email"]').value
-    //     const customerPhone = document.querySelector('input[name="c_phone"]').value
-    //     const customerAddress = document.querySelector('input[name="c_address"]').value
-    //     const customerType = document.querySelector('input[name="c_role"]').value
+    const customerMode = document.getElementById('c_id').value;
+    if(customerMode === "other"){
+        const customerName = document.querySelector('input[name="c_name"]').value
+        const customerEmail = document.querySelector('input[name="c_email"]').value
+        const customerPhone = document.querySelector('input[name="c_phone"]').value
+        const customerAddress = document.querySelector('input[name="c_address"]').value
+        const customerType = document.querySelector('input[name="c_role"]').value
 
-    //     if(!customerName.trim() || !customerEmail.trim() || !customerPhone.trim() ||!customerAddress.trim() || !customerType.trim()){
-    //          alert('Please fill all customer details');
-    //         return;
-    //     }
-    // }
+        if(!customerName.trim() || !customerEmail.trim() || !customerPhone.trim() ||!customerAddress.trim() || !customerType.trim()){
+             alert('Please fill all customer details');
+            return;
+        }
+    }
 
     // Proceed with form submission
     const form = e.target;

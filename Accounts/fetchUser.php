@@ -14,4 +14,4 @@ if (isset($_POST['u_id'])) {
     foreach($users as $user){
         echo '<option value="'.$user['u_id'].'">'.$user['u_name'].'</option>';
     }
-}
+}?>

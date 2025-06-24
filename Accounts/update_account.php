@@ -1,6 +1,8 @@
 <?php
-require_once('../config/dbcon.php');
+include('../config/dbcon.php');
+session_start();
 
+if (isset($_SESSION['userAuth']) && $_SESSION['userAuth'] != "") {
  
 $acc_id = $_POST['acc_id'];
 $ab_name = $_POST['ab_name'];
@@ -27,6 +29,15 @@ try{
 
 }catch(PDOException $e){
     echo json_encode(["status"=>"error", "message"=>"Database error: ".$e->getMessage()]);
+}
+} else {
+    // Unauthorized access
+    $_SESSION['toastr'] = [
+        'type' => 'error',
+        'message' => 'Unauthorized Access'
+    ];
+    header('Location: ../index.php');
+    exit();
 }
 ?>
 

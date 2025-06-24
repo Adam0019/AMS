@@ -119,6 +119,7 @@ $query1 = "SELECT * FROM user_tbl";
               <div class="mb-3">
                 <label for="u_id">Account Holder's Name</label>
                 <select class="form-control" id="u_id" name="u_id" required>
+                      <option value="" disabled selected>Account Holder's Name</option>
                   <?php
                   while($row1 = $stmt->fetch(PDO::FETCH_ASSOC)) {
                       echo '<option value="'.$row1['u_id'].'">'.$row1['u_name'].'</option>';
@@ -139,29 +140,37 @@ $query1 = "SELECT * FROM user_tbl";
               <!-- Bank Name -->
               <div class="mb-3 hidden" id="ab_nameField">
                 <label for="ab_name" class="form-label">Bank Name</label>
-                <input type="text" class="form-control" id="ab_name" name="ab_name" />
+                <input type="text" class="form-control" id="ab_name" name="ab_name" placeholder="Bank Name" />
               </div>
 
               <!-- Amount -->
               <div class="mb-3">
                 <label for="acc_ammo" class="form-label">Amount</label>
-                <input type="number" class="form-control" id="acc_ammo" name="acc_ammo" required />
+                <input type="number" class="form-control" id="acc_ammo" name="acc_ammo" placeholder="Amount" required />
               </div>
 
               <!-- Account Number -->
               <div class="mb-3 hidden" id="acc_numField">
                 <label for="acc_num" class="form-label">Account Number</label>
-                <input type="text" class="form-control" id="acc_num" name="acc_num" />
+                <input type="text" class="form-control" id="acc_num" name="acc_num" placeholder="Amount Number" />
               </div>
 
               <!-- Account Type -->
-              <div class="mb-3 hidden" id="acc_typeField">
-                <label for="acc_type" class="form-label">Account Type</label>
-                <select class="form-control" id="acc_type" name="acc_type">
-                  <option value="savings">Savings</option>
-                  <option value="current">Current</option>
-                </select>
-              </div>
+             <div class="mb-3 hidden" id="acc_typeField">
+  <label for="acc_type" class="form-label">Account Type</label>
+  <select class="form-control" id="acc_type" name="acc_type">
+    <option value="" disabled selected>Select Account Type</option>
+    <option value="savings">Savings</option>
+    <option value="current">Current</option>
+    <option value="other">Other</option>
+  </select>
+</div>
+
+<div class="mb-3 hidden" id="customAccTypeField">
+  <label for="acc_type" class="form-label">Custom Account Type</label>
+  <input type="text" class="form-control" id="acc_type" name="acc_type" placeholder="Enter custom account type">
+</div>
+
               <input type="hidden" name="submit" value="submit">
               <input type="hidden" name="fromAccount" value="fromAccount">
               <div class="modal-footer">
@@ -185,33 +194,38 @@ $query1 = "SELECT * FROM user_tbl";
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="viewAccModalLabel">view Account</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" ></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" ></button>
             </div>
             <div class="modal-body">
                     <input type="hidden" id="view_acc_id" name="acc_id">
-                    <div class="mb-3">
-                        <label for="view_u_id">Account Holder's Name</label>
-                 <select class="form-control" id="view_u_id" name="u_id" readonly>
+                    <div class="mb-3 row">
+                        <label for="view_u_id" class="col-sm-2 col-form-label fw-bold">Account Holder's Name:</label>
+                        <div class="col-sm-4">
+                 <p class="form-control-plaintext" id="view_u_id" name="u_id" >
                   <option value = "<?php echo $row2['u_id']?>"><?php echo $row2['u_name']?> </option>
                  
-                </select>
+                </p></div>
                     </div>
-                    <div class="mb-3">
-                        <label for="view_acc_num" class="form-label">Account Number</label>
-                        <input type="text" class="form-control" id="view_acc_num" name="acc_num" readonly>
+                    <div class="mb-3 row">
+                        <label for="view_acc_num" class="col-sm-2 col-form-label fw-bold">Account Number:</label>
+                        <div class="col-sm-4">
+                        <p class="form-control-plaintext" class="form-control" id="view_acc_num" name="acc_num"></p></div>
                     </div>
-                    <div class="mb-3">
-                        <label for="view_ab_name" class="form-label">Account Name</label>
-                        <input type="text" class="form-control" id="view_ab_name" name="ab_name" readonly>
+                    <div class="mb-3 row">
+                        <label for="view_ab_name" class="col-sm-2 col-form-label fw-bold">Account Name:</label>
+                        <div class="col-sm-4">
+                        <p class="form-control-plaintext" class="form-control" id="view_ab_name" name="ab_name"></p></div>
                     </div>
-                    <div class="mb-3">
-                        <label for="view_acc_ammo" class="form-label">Amount</label>
-                        <input type="text" class="form-control" id="view_acc_ammo" name="acc_ammo" readonly>
+                    <div class="mb-3 row">
+                        <label for="view_acc_ammo" class="col-sm-2 col-form-label fw-bold">Amount:</label>
+                        <div class="col-sm-4">
+                        <p class="form-control-plaintext" class="form-control" id="view_acc_ammo" name="acc_ammo"></p></div>
                     </div>
-                    <div class="mb-3">
-                        <label for="view_acc_type" class="form-label">Account Type</label>
-                        <input type="text" class="form-control" id="view_acc_type" name="acc_type" readonly>
-                            
+                    <div class="mb-3 row">
+                        <label for="view_acc_type" class="col-sm-2 col-form-label fw-bold">Account Type:</label>
+                        <div class="col-sm-4">
+                        <p class="form-control-plaintext" class="form-control" id="view_acc_type" name="acc_type">
+                            </p></div>
                     </div>
                     </div>
                     <div class="modal-footer">
@@ -307,6 +321,16 @@ $query3 = "SELECT * FROM user_tbl";
 include('../includes/footer.php'); ?>
 
 <script>
+
+  document.getElementById('acc_type').addEventListener('change', function () {
+    const customField = document.getElementById('customAccTypeField');
+    if (this.value === 'other') {
+      customField.classList.remove('hidden');
+    } else {
+      customField.classList.add('hidden');
+    }
+  });
+
   document.addEventListener('DOMContentLoaded', function(){
     const editButtons = document.querySelectorAll('.editAcc');
     editButtons.forEach(button =>{
@@ -340,19 +364,19 @@ include('../includes/footer.php'); ?>
         document.getElementById('view_acc_id').value=button.getAttribute('data-id');
 
         const abname = button.getAttribute('data-name');
-        document.getElementById('view_ab_name').value=abname;
+        document.getElementById('view_ab_name').textContent=abname;
         
         const uid = button.getAttribute('data-uid');
-        document.getElementById('view_u_id').value=uid;
+        document.getElementById('view_u_id').textContent=uid;
         
         const num = button.getAttribute('data-num');
-        document.getElementById('view_acc_num').value=num;
+        document.getElementById('view_acc_num').textContent=num;
         
         const ammo = button.getAttribute('data-ammo');
-        document.getElementById('view_acc_ammo').value=ammo;
+        document.getElementById('view_acc_ammo').textContent=ammo;
         
         const type = button.getAttribute('data-type');
-        document.getElementById('view_acc_type').value=type;
+        document.getElementById('view_acc_type').textContent=type;
 
       });
     });

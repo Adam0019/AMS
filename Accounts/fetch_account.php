@@ -1,6 +1,7 @@
 <?php
-
-require_once('../config/dbcon.php');
+include('../config/dbcon.php');
+session_start();
+if (isset($_SESSION['userAuth']) && $_SESSION['userAuth'] != "") {
 
 if(isset($_POST['acc_id'])) {
     $acc_id = $_POST['acc_id'];
@@ -23,9 +24,15 @@ try{
 }catch(PDOException $e){
   header('Content-Type: application/json');
         echo json_encode(['error' => 'Database error: ' . $e->getMessage()]);}
-} else {
-    // Return error if ID is not provided
-    header('Content-Type: application/json');
-    echo json_encode(['error' => 'Account ID not provided']);
+}else {
+    // Unauthorized access
+    $_SESSION['toastr'] = [
+        'type' => 'error',
+        'message' => 'ID not provided'
+    ];
+    header('Location: ../index.php');
+    exit();
 }
+} 
+
 ?>

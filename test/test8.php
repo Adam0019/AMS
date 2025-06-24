@@ -183,11 +183,11 @@ try {
                     <option value="other">Add New</option>
                 </select>
             </div>
-<!-- 
+
             <div class="form-group mt-4 d-none" id="customCIDField">
                 <label for="c_name">Add New Customer</label>
                 <input type="text" class="form-control" id="c_name" name="c_name" placeholder="Enter Customer Name">
-            </div> -->
+            </div>
 
             <div class="form-group mt-4">
                  <label for="gl_id">Purpose</label>
@@ -236,45 +236,6 @@ try {
         <div class="mb-3">
           <label class="form-label">Cheque Date</label>
           <input type="date" class="form-control" name="cheque_date" form="creditForm">
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Done</button>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- Third Modal: Customer Details -->
-<div class="modal fade" id="customerModal" tabindex="-1" aria-labelledby="customerModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Enter New Customer Details</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-      <div class="modal-body">
-        <div class="mb-3">
-          <label class="form-label">Customer Name</label>
-          <input type="text" class="form-control" name="c_name" form="creditForm">
-        </div>
-        <div class="mb-3">
-          <label class="form-label">Customer Email</label>
-          <input type="email" class="form-control" name="c_email" form="creditForm">
-        </div>
-        <div class="mb-3">
-          <label class="form-label">Customer Phone</label>
-          <input type="text" class="form-control" name="c_phone" form="creditForm">
-        </div>
-        <div class="mb-3">
-          <label class="form-label">Customer Address</label>
-          <input type="text" class="form-control" name="c_address" form="creditForm">
-        </div>
-        <div class="mb-3">
-          <label class="form-label">Type</label>
-          <select class="form-select" id="c_role" name="c_role" form="creditForm">
-                                <option value="Buyer" selected>Buyer</option>
-                                <option value="Seller">Seller</option>
-                            </select>
         </div>
       </div>
       <div class="modal-footer">
@@ -444,17 +405,17 @@ try {
 
 <script>
 document.addEventListener('DOMContentLoaded', function(){
-    // // Customer selection handler
-    // document.getElementById('c_id').addEventListener('change', function () {
-    //     const customField = document.getElementById('customCIDField');
-    //     if (this.value === 'other') {
-    //         customField.classList.remove('d-none');
-    //         document.getElementById('c_name').required = true;
-    //     } else {
-    //         customField.classList.add('d-none');
-    //         document.getElementById('c_name').required = false;
-    //     }
-    // });
+    // Customer selection handler
+    document.getElementById('c_id').addEventListener('change', function () {
+        const customField = document.getElementById('customCIDField');
+        if (this.value === 'other') {
+            customField.classList.remove('d-none');
+            document.getElementById('c_name').required = true;
+        } else {
+            customField.classList.add('d-none');
+            document.getElementById('c_name').required = false;
+        }
+    });
     // // Purpose selection handler
     document.getElementById('gl_id').addEventListener('change', function () {
         const customField1 = document.getElementById('customGLIDField');
@@ -480,35 +441,13 @@ document.getElementById('creditForm').addEventListener('submit', function(e) {
     }
 
     // Validate customer selection
-   // Validate customer selection
-const customerId = document.getElementById('c_id').value;
-
-if (customerId === 'other') {
-    const customerName = document.querySelector('input[name="c_name"]').value;
-    const customerEmail = document.querySelector('input[name="c_email"]').value;
-    const customerPhone = document.querySelector('input[name="c_phone"]').value;
-    const customerAddress = document.querySelector('input[name="c_address"]').value;
-    const customerRole = document.querySelector('select[name="c_role"]').value;
+    const customerId = document.getElementById('c_id').value;
+    const customerName = document.getElementById('c_name').value;
     
-    if (!customerName.trim() || !customerEmail.trim() || !customerPhone.trim() || !customerAddress.trim() || !customerRole.trim()) {
-        alert('Please fill all customer details');
+    if (customerId === 'other' && customerName.trim() === '') {
+        alert('Please enter customer name for new customer');
         return;
     }
-    
-    // Email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(customerEmail)) {
-        alert('Please enter a valid email address');
-        return;
-    }
-    
-    // Phone validation (basic)
-    const phoneRegex = /^[0-9]{10,}$/;
-    if (!phoneRegex.test(customerPhone.replace(/\D/g, ''))) {
-        alert('Please enter a valid phone number');
-        return;
-    }
-}
     
     // // Validate purpose selection
     const GLId = document.getElementById('gl_id').value;
@@ -532,20 +471,6 @@ if (customerId === 'other') {
             return;
         }
     }
-
-    // const customerMode = document.getElementById('c_id').value;
-    // if(customerMode === "other"){
-    //     const customerName = document.querySelector('input[name="c_name"]').value
-    //     const customerEmail = document.querySelector('input[name="c_email"]').value
-    //     const customerPhone = document.querySelector('input[name="c_phone"]').value
-    //     const customerAddress = document.querySelector('input[name="c_address"]').value
-    //     const customerType = document.querySelector('input[name="c_role"]').value
-
-    //     if(!customerName.trim() || !customerEmail.trim() || !customerPhone.trim() ||!customerAddress.trim() || !customerType.trim()){
-    //          alert('Please fill all customer details');
-    //         return;
-    //     }
-    // }
 
     // Proceed with form submission
     const form = e.target;
@@ -574,13 +499,6 @@ if (customerId === 'other') {
         if (this.value === 'Cheque') {
             const chequeModal = new bootstrap.Modal(document.getElementById('chequeModal'));
             chequeModal.show();
-        }
-    });
-    // Show Cheque Modal when Cheque is selected in Add Credit
-    document.getElementById('c_id').addEventListener('change', function () {
-        if (this.value === 'other') {
-            const customerModal = new bootstrap.Modal(document.getElementById('customerModal'));
-            customerModal.show();
         }
     });
 
