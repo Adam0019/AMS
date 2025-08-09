@@ -7,7 +7,8 @@ if(isset($_POST['credit_id'])){
     try{
         $query= "SELECT * FROM credit_tbl 
                       INNER JOIN customer_tbl ON credit_tbl.c_id = customer_tbl.c_id
-                      INNER JOIN gl_tbl ON credit_tbl.gl_id = gl_tbl.gl_id WHERE credit_id = :credit_id";
+                      INNER JOIN gl_tbl ON credit_tbl.gl_id = gl_tbl.gl_id 
+                       INNER JOIN account_tbl ON credit_tbl.acc_id = account_tbl.acc_id WHERE credit_id = :credit_id";
         $stmt = $pdo->prepare($query);
         $stmt->bindParam(':credit_id', $credit_id);
         $stmt->execute();

@@ -291,66 +291,66 @@ $(document).ready(function() {
 //////////// USER Ends ////////////
 
 //////////// ACCOUNT Starts ////////////
-    //modal toggle
-   $(document).ready(function () {
-            function toggleFields() {
-                let isBank = $("#Bank").is(":checked");
+//     //modal toggle
+//    $(document).ready(function () {
+//             function toggleFields() {
+//                 let isBank = $("#Bank").is(":checked");
                 
-                $("#ab_nameField").toggle(isBank);
-                $("#acc_numField").toggle(isBank);
-                $("#acc_typeField").toggle(isBank);
-            }
+//                 $("#ab_nameField").toggle(isBank);
+//                 $("#acc_numField").toggle(isBank);
+//                 $("#acc_typeField").toggle(isBank);
+//             }
 
-            // Run when radio button is clicked
-            $('input[name="a_type"]').change(toggleFields);
+//             // Run when radio button is clicked
+//             $('input[name="a_type"]').change(toggleFields);
 
-            // Run on page load to ensure proper visibility
-            toggleFields();
-        });
+//             // Run on page load to ensure proper visibility
+//             toggleFields();
+//         });
 
-    // ADD NEW ACCOUNT
+//     // ADD NEW ACCOUNT
 
-    $(document).ready(function(){
-        $('#accountForm').on('submit', function(e){
-            e.preventDefault();
-            console.log('account working');
+//     $(document).ready(function(){
+//         $('#accountForm').on('submit', function(e){
+//             e.preventDefault();
+//             console.log('account working');
 
-            $.ajax({
-                url:'../Accounts/store_account.php',
-                type:'POST',
-                data: $(this).serialize(),
-                success:function(response){
-                    // console.log('response');
-                    $('#accountModal').modal('hide');
-                    alert('Account created successfully!');
-                    window.location.reload();
-                },
-                error:function(xhr,status,error){
-                    alert('An error occurred: ' + error);
-                }
-            })
-        });
-    });
+//             $.ajax({
+//                 url:'../Accounts/store_account.php',
+//                 type:'POST',
+//                 data: $(this).serialize(),
+//                 success:function(response){
+//                     // console.log('response');
+//                     $('#accountModal').modal('hide');
+//                     alert('Account created successfully!');
+//                     window.location.reload();
+//                 },
+//                 error:function(xhr,status,error){
+//                     alert('An error occurred: ' + error);
+//                 }
+//             })
+//         });
+//     });
 
-    //fetch user
-     $('#u_id').on('change', function() {
-        var cat_id = $(this).val();  
-        console.log('hello');
-        if(u_id){
-            $.ajax({
-                url:'../Accounts/fetchUser.php',
-                type:'POST',
-                data:{u_id:u_id},
-                success:function(response){
-                    $('#u_id').html(response);},
-                error:function(xhr,status,error){
-                    console.error("Error fetching user data:", error);
-                }
-            });
-        }else{
-            $('#u_id').html('<option value="">Select User</option>');
-        }
-    });
+    // //fetch user
+    //  $('#u_id').on('change', function() {
+    //     var cat_id = $(this).val();  
+    //     console.log('hello');
+    //     if(u_id){
+    //         $.ajax({
+    //             url:'../Accounts/fetchUser.php',
+    //             type:'POST',
+    //             data:{u_id:u_id},
+    //             success:function(response){
+    //                 $('#u_id').html(response);},
+    //             error:function(xhr,status,error){
+    //                 console.error("Error fetching user data:", error);
+    //             }
+    //         });
+    //     }else{
+    //         $('#u_id').html('<option value="">Select User</option>');
+    //     }
+    // });
 
     // View the Account details
 /*$(document).ready(function(){
@@ -437,60 +437,60 @@ $(document).ready(function(){
 
 ////Delete Account
 
-$(document).ready(function() {
+// $(document).ready(function() {
     
-    $('.deleteAcc').on('click', function() {
-        const acc_Id = $(this).data('id');
-        $('#deleteACCId').val(acc_Id);
-    });
+//     $('.deleteAcc').on('click', function() {
+//         const acc_Id = $(this).data('id');
+//         $('#deleteACCId').val(acc_Id);
+//     });
 
-    // Confirm delete
-    $('#confirmDeleteAcc').on('click', function() {
-        const acc_Id = $('#deleteACCId').val();
+//     // Confirm delete
+//     $('#confirmDeleteAcc').on('click', function() {
+//         const acc_Id = $('#deleteACCId').val();
 
-        $.ajax({
-            url: 'delete_account.php',
-            type: 'POST',
-            data: { acc_id: acc_Id },
-            success: function(response) {
-                // Handle success response
-                $('#deleteAccModal').modal('hide');
-                 alert("Account deleted successfully!");
-                window.location.reload();
+//         $.ajax({
+//             url: 'delete_account.php',
+//             type: 'POST',
+//             data: { acc_id: acc_Id },
+//             success: function(response) {
+//                 // Handle success response
+//                 $('#deleteAccModal').modal('hide');
+//                  alert("Account deleted successfully!");
+//                 window.location.reload();
                 
-            },
-            error: function() {
-                alert('Error deleting user.');
-            }
-        });
-    });
-});
+//             },
+//             error: function() {
+//                 alert('Error deleting user.');
+//             }
+//         });
+//     });
+// });
 //////////// ACCOUNT Ends ////////////
 
 //////////// GL Starts ////////////
 
 // ADD NEW GL
-$(document).ready(function(){
-    $('#addGLForm').on('submit', function(e){
-        e.preventDefault();
-        console.log('GL working');
+// $(document).ready(function(){
+//     $('#addGLForm').on('submit', function(e){
+//         e.preventDefault();
+//         console.log('GL working');
 
-        $.ajax({
-            url:'../General_Ledger/store_gl.php',
-            type:'POST',
-            data: $(this).serialize(),
-            success:function(response){
-                //console.log('response');
-                $('#addGLModal').modal('hide');
-                 alert('GL Title created successfully!');
-                 window.location.reload();
-            },
-            error:function(xhr,status,error){
-                alert('An error occurred: ' + error);
-            }
-        })
-    });
-});
+//         $.ajax({
+//             url:'../General_Ledger/store_gl.php',
+//             type:'POST',
+//             data: $(this).serialize(),
+//             success:function(response){
+//                 //console.log('response');
+//                 $('#addGLModal').modal('hide');
+//                  alert('GL Title created successfully!');
+//                  window.location.reload();
+//             },
+//             error:function(xhr,status,error){
+//                 alert('An error occurred: ' + error);
+//             }
+//         })
+//     });
+// });
 
 ////Delete GL Titles Modal
 
@@ -617,25 +617,25 @@ $(document).ready(function() {
 //     });
 // });
 
-    //fetch customer
-     $('#c_id').on('change', function() {
-        var cus_id = $(this).val();  
-        console.log('hello');
-        if(c_id){
-            $.ajax({
-                url:'../Credit/fetchCustomer.php',
-                type:'POST',
-                data:{c_id:c_id},
-                success:function(response){
-                    $('#c_id').html(response);},
-                error:function(xhr,status,error){
-                    console.error("Error fetching Customer data:", error);
-                }
-            });
-        }else{
-            $('#c_id').html('<option value="">Select Customer</option>');
-        }
-    });
+    // //fetch customer
+    //  $('#c_id').on('change', function() {
+    //     var cus_id = $(this).val();  
+    //     console.log('hello');
+    //     if(c_id){
+    //         $.ajax({
+    //             url:'../Credit/fetchCustomer.php',
+    //             type:'POST',
+    //             data:{c_id:c_id},
+    //             success:function(response){
+    //                 $('#c_id').html(response);},
+    //             error:function(xhr,status,error){
+    //                 console.error("Error fetching Customer data:", error);
+    //             }
+    //         });
+    //     }else{
+    //         $('#c_id').html('<option value="">Select Customer</option>');
+    //     }
+    // });
     //fetch GL
      $('#gl_id').on('change', function() {
         var gls_id = $(this).val();  
@@ -655,6 +655,66 @@ $(document).ready(function() {
             $('#gl_id').html('<option value="">Select GL</option>');
         }
     });
+       // Handle "Select All Visible"
+ /* $("#selectAllVisible").on("click", function () {
+    const rows = table.rows({ page: "current" }).nodes();
+    $('input[type="checkbox"].selectBox', rows).prop("checked", this.checked);
+  });
+
+  // Uncheck "Select All" if one item is manually unchecked
+  $("#data-table tbody").on(
+    "change",
+    'input[type="checkbox"].selectBox',
+    function () {
+      if (!this.checked) {
+        $("#selectAllVisible").prop("checked", false);
+      }
+    }
+  );
+
+  // Delete selected items
+  $("#deleteSelected").on("click", function () {
+    const selected = [];
+    table.$('input[type="checkbox"].selectBox:checked').each(function () {
+      selected.push($(this).val());
+    });
+
+    deleteGLRecords(selected); // 🔥 Call reusable function here
+  });
+// });
+function deleteGLRecords(glIds = []) {
+  if (!Array.isArray(glIds) || glIds.length === 0) {
+    alert("No GL records selected for deletion.");
+    return;
+  }
+
+  if (!confirm("Are you sure you want to delete selected GL records?")) return;
+
+  $.ajax({
+    url: "batch_delete_gl.php",
+    method: "POST",
+    contentType: "application/json",
+    data: JSON.stringify({ gl_ids: glIds }),
+    success: function (response) {
+      try {
+        const res = JSON.parse(response);
+        if (res.success) {
+          alert("Selected records deleted successfully.");
+          location.reload();
+        } else {
+          alert("Failed to delete records.");
+        }
+      } catch (e) {
+        console.error("Invalid response:", e);
+        alert("Unexpected error occurred.");
+      }
+    },
+    error: function () {
+      alert("AJAX request failed.");
+    });
+}
+}*/
+
 ////////// CREDIT ENDS /////////
 
 

@@ -15,7 +15,7 @@ if ($_SESSION['userAuth'] != "" && $_SESSION['userAuth'] != NULL) {
             <div class="col-md-8">
                 <h4><i class="bi bi-cash-coin"></i> Manage Credit</h4>
             </div>
-            <div class="col-md-4">
+            <div class="mt-4 px-4">
                 <!-- Add credit Modal Button -->
                 <button type="button" class="btn btn-light float-end" data-bs-toggle="modal" data-bs-target="#creditModal">
                     <i class="bi bi-person-fill-add"></i>
@@ -32,6 +32,7 @@ if ($_SESSION['userAuth'] != "" && $_SESSION['userAuth'] != NULL) {
            $query = "SELECT * FROM credit_tbl
     INNER JOIN customer_tbl ON credit_tbl.c_id = customer_tbl.c_id
     INNER JOIN gl_tbl ON credit_tbl.gl_id = gl_tbl.gl_id
+    INNER JOIN account_tbl ON credit_tbl.acc_id = account_tbl.acc_id
     ORDER BY credit_tbl.credit_id";
 
             $stmt = $pdo->prepare($query);
@@ -81,8 +82,11 @@ if ($_SESSION['userAuth'] != "" && $_SESSION['userAuth'] != NULL) {
                                     data-credit_mode="<?php echo htmlspecialchars($row['credit_mode']); ?>"
                                     data-c_name="<?php echo htmlspecialchars($row['c_name']); ?>"
                                     data-gl_name="<?php echo htmlspecialchars($row['gl_name']); ?>"
+                                    data-acc_num="<?php echo htmlspecialchars($row['acc_num']); ?>"
+                                    data-acc_ammo="<?php echo htmlspecialchars($row['acc_ammo']); ?>"
                                     data-c_id="<?php echo htmlspecialchars($row['c_id']); ?>"
                                     data-gl_id="<?php echo htmlspecialchars($row['gl_id']); ?>"
+                                    data-acc_id="<?php echo htmlspecialchars($row['acc_id']); ?>"
                                     data-cheque_number="<?php echo isset($row['cheque_number']) ? htmlspecialchars($row['cheque_number']) : ''; ?>"
                                     data-bank_name="<?php echo isset($row['bank_name']) ? htmlspecialchars($row['bank_name']) : ''; ?>"
                                     data-cheque_date="<?php echo isset($row['cheque_date']) ? htmlspecialchars($row['cheque_date']) : ''; ?>"
@@ -97,6 +101,7 @@ if ($_SESSION['userAuth'] != "" && $_SESSION['userAuth'] != NULL) {
                                     data-credit_mode="<?php echo htmlspecialchars($row['credit_mode']); ?>"
                                     data-c_id="<?php echo htmlspecialchars($row['c_id']); ?>"
                                     data-gl_id="<?php echo htmlspecialchars($row['gl_id']); ?>"
+                                     data-acc_id="<?php echo htmlspecialchars($row['acc_id']); ?>"
                                     data-cheque_number="<?php echo isset($row['cheque_number']) ? htmlspecialchars($row['cheque_number']) : ''; ?>"
                                     data-bank_name="<?php echo isset($row['bank_name']) ? htmlspecialchars($row['bank_name']) : ''; ?>"
                                     data-cheque_date="<?php echo isset($row['cheque_date']) ? htmlspecialchars($row['cheque_date']) : ''; ?>"
@@ -137,8 +142,19 @@ try {
     $stmt2->execute();
     $gls = $stmt2->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
-    echo "Error fetching GL accounts: " . htmlspecialchars($e->getMessage());
+    echo "Error fetching GL Details: " . htmlspecialchars($e->getMessage());
     $gls = [];
+}
+
+// Get Account data
+try {
+    $query3 = "SELECT * FROM account_tbl";
+    $stmt3 = $pdo->prepare($query3);
+    $stmt3->execute();
+    $accs = $stmt3->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    echo "Error fetching Accounts: " . htmlspecialchars($e->getMessage());
+    $accs = [];
 }
 ?>
 
@@ -183,6 +199,36 @@ try {
                     <option value="other">Add New</option>
                 </select>
             </div>
+            <!-- <div class="form-group mt-4">
+                <label for="acc_id">Account</label>
+                <select class="form-control" id="acc_id" name="acc_id" required>
+                    <option value="" disabled selected>Account</option>
+                    <?php foreach ($accs as $acc): ?>
+                        <option value="<?php echo htmlspecialchars($acc['acc_id']); ?>">
+                            <?php echo htmlspecialchars($acc['acc_num'].' ₹ '.$acc['acc_ammo']); ?>
+                           
+                        </option>
+
+                    <?php endforeach; ?>
+                </select>
+            </div> -->
+           <div class="form-group mt-4">
+    <label for="acc_id">Account</label>
+    <select class="form-control" id="acc_id" name="acc_id" required>
+        <option value="" disabled selected>Account</option>
+        <?php foreach ($accs as $acc): ?>
+            <option value="<?php echo htmlspecialchars($acc['acc_id']); ?>">
+                <?php echo htmlspecialchars($acc['acc_num']); ?>
+            </option>
+        <?php endforeach; ?>
+    </select>
+    <!-- Add this div to display account balance -->
+    <div class="mt-4">
+        <!-- <small class="text-muted"> </small> -->
+        <label for="acc_ammo">Current Balance:</label>
+        <span id="account_balance_display" class="fw-bold text-success"></span>
+    </div>
+</div>
 <!-- 
             <div class="form-group mt-4 d-none" id="customCIDField">
                 <label for="c_name">Add New Customer</label>
@@ -311,6 +357,14 @@ try {
           <div class="col-8"><span id="view_credit_mode"></span></div>
         </div>
         <div class="row mb-2">
+          <div class="col-4"><strong>Account No:</strong></div>
+          <div class="col-8"><span id="view_acc_num"></span></div>
+        </div>
+        <div class="row mb-2">
+          <div class="col-4"><strong>Account Balance:</strong></div>
+          <div class="col-8"><span id="view_acc_ammo"></span></div>
+        </div>
+        <div class="row mb-2">
           <div class="col-4"><strong>From:</strong></div>
           <div class="col-8"><span id="view_c_name"></span></div>
         </div>
@@ -380,6 +434,33 @@ try {
               <?php endforeach; ?>
             </select>
           </div>
+          <!-- <div class="form-group mt-4">
+            <label for="edit_acc_id">Account</label>
+            <select class="form-control" id="edit_acc_id" name="acc_id" required>
+              <option value="" disabled selected>Account</option>
+              <?php foreach($accs as $acc): ?>
+                <option value="<?php echo htmlspecialchars($acc['acc_id']); ?>">
+                <?php echo htmlspecialchars($acc['acc_num']); ?></option>
+                <?php echo htmlspecialchars($acc['acc_ammo']); ?></option>
+              <?php endforeach; ?>
+            </select>
+          </div> -->
+          <div class="form-group mt-4">
+    <label for="edit_acc_id">Account</label>
+    <select class="form-control" id="edit_acc_id" name="acc_id" required>
+        <option value="" disabled selected>Account</option>
+        <?php foreach($accs as $acc): ?>
+            <option value="<?php echo htmlspecialchars($acc['acc_id']); ?>">
+                <?php echo htmlspecialchars($acc['acc_num']); ?>
+            </option>
+        <?php endforeach; ?>
+    </select>
+    <!-- Add this div to display account balance -->
+    <div class="mt-2">
+        <label for="acc_ammo">Current Balance:</label>
+        <span id="edit_account_balance_display" class="fw-bold text-success"></span>
+    </div>
+</div>
 
           <div class="form-group mt-4">
             <label for="edit_gl_id">Purpose</label>
@@ -443,6 +524,38 @@ try {
 <?php include('../includes/footer.php'); ?>
 
 <script>
+  // Function to fetch and display account balance
+function fetchAccountBalance(accId, displayElementId) {
+    if (!accId || accId === '') {
+        document.getElementById(displayElementId).textContent = '';
+        return;
+    }
+
+    // Show loading indicator
+    document.getElementById(displayElementId).textContent = 'Loading...';
+
+    // Create FormData for POST request
+    const formData = new FormData();
+    formData.append('acc_id', accId);
+
+    fetch('get_account_balance.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            document.getElementById(displayElementId).textContent = '₹ ' + parseFloat(data.balance).toFixed(2);
+        } else {
+            document.getElementById(displayElementId).textContent = 'Error: ' + (data.error || 'Unknown error');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        document.getElementById(displayElementId).textContent = 'Network error';
+    });
+}
+
 document.addEventListener('DOMContentLoaded', function(){
     // // Customer selection handler
     // document.getElementById('c_id').addEventListener('change', function () {
@@ -467,6 +580,10 @@ document.addEventListener('DOMContentLoaded', function(){
         }
     });
 
+ // Account balance fetch for Add Credit Modal
+    document.getElementById('acc_id').addEventListener('change', function() {
+        fetchAccountBalance(this.value, 'account_balance_display');
+    });
     // Add Credit Form Submission
    // Enhanced form validation
 document.getElementById('creditForm').addEventListener('submit', function(e) {
@@ -546,6 +663,7 @@ if (customerId === 'other') {
     //         return;
     //     }
     // }
+    
 
     // Proceed with form submission
     const form = e.target;
@@ -595,6 +713,8 @@ if (customerId === 'other') {
             document.getElementById('view_credit_mode').textContent = button.getAttribute('data-credit_mode');
             document.getElementById('view_c_name').textContent = button.getAttribute('data-c_name');
             document.getElementById('view_gl_name').textContent = button.getAttribute('data-gl_name');
+            document.getElementById('view_acc_num').textContent = button.getAttribute('data-acc_num');
+            document.getElementById('view_acc_ammo').textContent = button.getAttribute('data-acc_ammo');
             document.getElementById('view_cheque_number').textContent = button.getAttribute('data-cheque_number') || 'N/A';
             document.getElementById('view_bank_name').textContent = button.getAttribute('data-bank_name') || 'N/A';
             document.getElementById('view_cheque_date').textContent = button.getAttribute('data-cheque_date') || 'N/A';
@@ -612,6 +732,11 @@ if (customerId === 'other') {
             document.getElementById('edit_credit_mode').value = creditMode;
             document.getElementById('edit_c_id').value = button.getAttribute('data-c_id');
             document.getElementById('edit_gl_id').value = button.getAttribute('data-gl_id');
+            // document.getElementById('edit_acc_id').value = button.getAttribute('data-acc_id');
+          // Add this to your existing JavaScript in credit.php
+            document.getElementById('edit_acc_id').addEventListener('change', function() {
+            fetchAccountBalance(this.value, 'edit_account_balance_display');
+});
             
             // Set cheque details
             document.getElementById('edit_cheque_number').value = button.getAttribute('data-cheque_number') || '';

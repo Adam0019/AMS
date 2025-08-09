@@ -18,17 +18,17 @@ if (isset($_POST['submit'])) {
             'type' => 'error',
             'message' => 'Invalid CSRF token'
         ];
-        header('Location: credit.php');
+        header('Location: debit.php');
         exit();
     }
 
     // Input validation
     $amount = filter_var($_POST['amount'], FILTER_VALIDATE_FLOAT);
-    $credit_mode = trim($_POST['credit_mode']);
-    $c_date = $_POST['c_date'];
-    $c_id_input = $_POST['c_id'];
-    $acc_id = $_POST['acc_id']; // Get from form instead of session
-    $gl_id_input = $_POST['gl_id'];
+    $debit_mode = trim($_POST['debit_mode']);
+    $d_date = $_POST['d_date'];
+    $dbt_c_id_input = $_POST['dbt_c_id'];
+    $dbt_gl_id_input = $_POST['dbt_gl_id'];
+    $dbt_acc_id = $_POST['dbt_acc_id'];
     $c_name = trim($_POST['c_name'] ?? '');
     $c_email = trim($_POST['c_email'] ?? '');
     $c_phone = trim($_POST['c_phone'] ?? '');
@@ -36,69 +36,49 @@ if (isset($_POST['submit'])) {
     $c_role = trim($_POST['c_role'] ?? '');
     $gl_name = trim($_POST['gl_name'] ?? '');
 
-    // Store amount in session
-    $_SESSION['c_amount'] = $amount;
-
-    // Fetch account balance and store in session
-    try {
-        $stmt = $pdo->prepare("SELECT acc_ammo FROM account_tbl WHERE acc_id = :acc_id");
-        $stmt->bindParam(':acc_id', $acc_id);
-        $stmt->execute();
-        $account = $stmt->fetch(PDO::FETCH_ASSOC);
-        
-        if ($account) {
-            $_SESSION['acc_ammo'] = $account['acc_ammo'];
-            
-            // Optional: Store updated balance after credit
-            $new_balance = $account['acc_ammo'] + $amount;
-            $_SESSION['new_acc_balance'] = $new_balance;
-        }
-    } catch (PDOException $e) {
-        error_log("Error fetching account balance: " . $e->getMessage());
-    }
-
     // Validate required fields
     if (!$amount || $amount <= 0) {
         $_SESSION['toastr'] = [
             'type' => 'error',
             'message' => 'Invalid amount'
         ];
-        header('Location: credit.php');
+        header('Location: debit.php');
         exit();
     }
 
-    if (!in_array($credit_mode, ['Demand Draft', 'Cheque', 'NEFT/RTGS'])) {
+    if (!in_array($debit_mode, ['Demand Draft', 'Cheque', 'NEFT/RTGS'])) {
         $_SESSION['toastr'] = [
             'type' => 'error',
-            'message' => 'Invalid credit mode'
+            'message' => 'Invalid debit mode'
         ];
-        header('Location: credit.php');
+        header('Location: debit.php');
         exit();
     }
+   
 
     // Date validation
-    if (!DateTime::createFromFormat('Y-m-d', $c_date)) {
+    if (!DateTime::createFromFormat('Y-m-d', $d_date)) {
         $_SESSION['toastr'] = [
             'type' => 'error',
             'message' => 'Invalid date format'
         ];
-        header('Location: credit.php');
+        header('Location: debit.php');
         exit();
     }
 
     // Handle cheque details
-    $cheque_number = ($credit_mode === 'Cheque') ? trim($_POST['cheque_number'] ?? '') : '';
-    $bank_name = ($credit_mode === 'Cheque') ? trim($_POST['bank_name'] ?? '') : '';
-    $cheque_date = ($credit_mode === 'Cheque') ? ($_POST['cheque_date'] ?? '') : '';
+    $cheque_number = ($debit_mode === 'Cheque') ? trim($_POST['cheque_number'] ?? '') : '';
+    $bank_name = ($debit_mode === 'Cheque') ? trim($_POST['bank_name'] ?? '') : '';
+    $cheque_date = ($debit_mode === 'Cheque') ? ($_POST['cheque_date'] ?? '') : '';
 
-    // Validate cheque details if credit mode is Cheque
-    if ($credit_mode === 'Cheque') {
+    // Validate cheque details if debit mode is Cheque
+    if ($debit_mode === 'Cheque') {
         if (empty($cheque_number)) {
             $_SESSION['toastr'] = [
                 'type' => 'error',
                 'message' => 'Cheque number is required for cheque payments'
             ];
-            header('Location: credit.php');
+            header('Location: debit.php');
             exit();
         }
         
@@ -107,7 +87,7 @@ if (isset($_POST['submit'])) {
                 'type' => 'error',
                 'message' => 'Bank name is required for cheque payments'
             ];
-            header('Location: credit.php');
+            header('Location: debit.php');
             exit();
         }
         
@@ -116,7 +96,7 @@ if (isset($_POST['submit'])) {
                 'type' => 'error',
                 'message' => 'Invalid cheque date format'
             ];
-            header('Location: credit.php');
+            header('Location: debit.php');
             exit();
         }
     }
@@ -127,13 +107,19 @@ if (isset($_POST['submit'])) {
         // Handle customer logic
         $actual_c_id = null;
         
-        if ($c_id_input === 'other') {
+        if ($dbt_c_id_input === 'other') {
             // Adding new customer
             if (empty($c_name)) {
                 throw new Exception('Customer name is required for new customer');
             }
 
-            $stmt = $pdo->prepare("SELECT MAX(c_id) as max_id FROM customer_tbl WHERE c_id REGEXP '^[0-9]+$'");
+            // Generate new customer ID
+           // Instead of using REGEXP, use a more secure approach
+            $stmt = $pdo->prepare(
+                
+                // "SELECT COALESCE(MAX(CAST(c_id AS UNSIGNED)), 0) + 1 as next_id FROM customer_tbl WHERE c_id REGEXP '^[0-9]+$'"
+                "SELECT MAX(c_id) as max_id FROM customer_tbl WHERE c_id REGEXP '^[0-9]+$'"
+        );
             $stmt->execute();
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
             $actual_c_id = ($result['max_id'] ? intval($result['max_id']) + 1 : 1);
@@ -149,7 +135,7 @@ if (isset($_POST['submit'])) {
             $stmt->execute();
         } else {
             // Using existing customer
-            $actual_c_id = filter_var($c_id_input, FILTER_VALIDATE_INT);
+            $actual_c_id = filter_var($dbt_c_id_input, FILTER_VALIDATE_INT);
             if (!$actual_c_id) {
                 throw new Exception('Invalid customer ID');
             }
@@ -167,11 +153,12 @@ if (isset($_POST['submit'])) {
         // Handle GL account logic
         $actual_gl_id = null;
 
-        if ($gl_id_input === 'other') {
+        if ($dbt_gl_id_input === 'other') {
             if (empty($gl_name)) {
                 throw new Exception('GL name is required for new GL account');
             }
 
+            // Fixed: REGEXP instead of REGXP
             $stmt = $pdo->prepare("SELECT MAX(gl_id) as max_id_1 FROM gl_tbl WHERE gl_id REGEXP '^[0-9]+$'");
             $stmt->execute();
             $result2 = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -184,7 +171,7 @@ if (isset($_POST['submit'])) {
             $stmt->execute();
         } else {
             // Using existing GL account
-            $actual_gl_id = filter_var($gl_id_input, FILTER_VALIDATE_INT);
+            $actual_gl_id = filter_var($dbt_gl_id_input, FILTER_VALIDATE_INT);
             if (!$actual_gl_id) {
                 throw new Exception('Invalid GL account ID');
             }
@@ -199,52 +186,30 @@ if (isset($_POST['submit'])) {
             }
         }
 
-        // Insert credit record
-        $query = "INSERT INTO credit_tbl (amount, credit_mode, c_date, c_id, gl_id, acc_id, cheque_number, bank_name, cheque_date, credit_status)
-                  VALUES (:amount, :credit_mode, :c_date, :c_id, :gl_id, :acc_id, :cheque_number, :bank_name, :cheque_date, 'active')";
+        // Insert debit record - Fixed: Use $actual_gl_id instead of $gl_id
+        $query = "INSERT INTO debit_tbl (amount, debit_mode, d_date, dbt_c_id, dbt_gl_id, cheque_number, bank_name, cheque_date, debit_status)
+                  VALUES (:amount, :debit_mode, :d_date, :dbt_c_id, :dbt_gl_id, :cheque_number, :bank_name, :cheque_date, 'active')";
 
         $stmt = $pdo->prepare($query);
         $stmt->bindParam(':amount', $amount);
-        $stmt->bindParam(':credit_mode', $credit_mode);
-        $stmt->bindParam(':c_date', $c_date);
-        $stmt->bindParam(':c_id', $actual_c_id);
-        $stmt->bindParam(':gl_id', $actual_gl_id);
-        $stmt->bindParam(':acc_id', $acc_id);
+        $stmt->bindParam(':debit_mode', $debit_mode);
+        $stmt->bindParam(':d_date', $d_date);
+        $stmt->bindParam(':dbt_c_id', $actual_c_id);
+        $stmt->bindParam(':dbt_gl_id', $actual_gl_id); // Fixed: Use actual_gl_id
         $stmt->bindParam(':cheque_number', $cheque_number);
         $stmt->bindParam(':bank_name', $bank_name);
         $stmt->bindParam(':cheque_date', $cheque_date);
         $stmt->execute();
 
-        // Update account balance in database (add credit amount to current balance)
-        $updateStmt = $pdo->prepare("UPDATE account_tbl SET acc_ammo = acc_ammo + :amount WHERE acc_id = :acc_id");
-        $updateStmt->bindParam(':amount', $amount);
-        $updateStmt->bindParam(':acc_id', $acc_id);
-        $updateStmt->execute();
-
-        // Verify the update was successful
-        if ($updateStmt->rowCount() === 0) {
-            throw new Exception('Failed to update account balance - account may not exist');
-        }
-
-        // Fetch the updated balance for session storage
-        $balanceStmt = $pdo->prepare("SELECT acc_ammo FROM account_tbl WHERE acc_id = :acc_id");
-        $balanceStmt->bindParam(':acc_id', $acc_id);
-        $balanceStmt->execute();
-        $updatedAccount = $balanceStmt->fetch(PDO::FETCH_ASSOC);
-
-        if ($updatedAccount) {
-            // Update session with the new balance
-            $_SESSION['new_acc_balance'] = $updatedAccount['acc_ammo'];
-        }
-
         $pdo->commit();
 
         $_SESSION['toastr'] = [
             'type' => 'success',
-            'message' => 'Credit added successfully!'
+            'message' => 'debit added successfully!'
         ];
         
-        header('Location: credit.php');
+        // Don't echo here if this is meant to be a redirect
+        header('Location: debit.php');
         exit();
 
     } catch (Exception $e) {
@@ -254,7 +219,7 @@ if (isset($_POST['submit'])) {
             'message' => 'Transaction failed: ' . $e->getMessage()
         ];
         
-        header('Location: credit.php');
+        header('Location: debit.php');
         exit();
     }
 } else {
@@ -262,7 +227,7 @@ if (isset($_POST['submit'])) {
         'type' => 'error',
         'message' => 'Invalid request method'
     ];
-    header('Location: credit.php');
+    header('Location: debit.php');
     exit();
 }
 ?>

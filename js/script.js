@@ -4,3 +4,6 @@ $(document).ready(function () {
     $(table).DataTable();
   });
 });
+// $(document).ready(function () {
+//   const table = $("#data-table").DataTable();
+// });

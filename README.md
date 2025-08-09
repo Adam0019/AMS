@@ -14,3 +14,9 @@
 ISSUES:-
 
 1.  Using Ajax was a bit hard as its caused an error during fetching the id so we repaced the ajax part with jquerry issues is solved but need to study ajax more to avoid further conflits
+
+###################################################################################
+
+1. Learn how to calculate and update the amount using sessions [between two tbls]
+2. Create a ledger out of credit and debit tbls
+   ##################################################################################

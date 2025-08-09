@@ -4,7 +4,7 @@ require_once('../config/dbcon.php');
 
 
 $c_id = $_POST['c_id'];
-$c_name = $_POST['c_name'];
+$c_name = $_SESSION['c_name'];
 $c_email = $_POST['c_email'];
 $c_phone = $_POST['c_phone'];
 $c_role = $_POST['c_role'];

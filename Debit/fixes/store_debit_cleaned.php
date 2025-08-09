@@ -3,114 +3,97 @@ include('../config/dbcon.php');
 session_start();
 
 if (isset($_SESSION['userAuth']) && $_SESSION['userAuth'] != "") {
-    // CSRF Token Validation
-    if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+     if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
         $_SESSION['toastr'] = [
             'type' => 'error',
             'message' => 'Invalid CSRF token'
         ];
-        header('Location: credit.php');
+        header('Location: debit.php');
         exit();
     }
-
-    $credit_id = $_POST['credit_id'];
+//  if (isset($_POST['submit'])) {
+    $debit_id = $_POST['debit_id'];
     $new_amount = $_POST['amount'];
-    $credit_mode = $_POST['credit_mode'];
-    $c_date = $_POST['c_date'];
-    $c_id = $_POST['c_id'];
-    $gl_id = $_POST['gl_id'];
-    $acc_id = $_POST['acc_id'];
+    $debit_mode = $_POST['debit_mode'];
+    $d_date = $_POST['d_date'];
+    $dbt_c_id = $_POST['dbt_c_id'];
+    $dbt_gl_id = $_POST['dbt_gl_id'];
+    $dbt_acc_id = $_POST['dbt_acc_id'];
     $cheque_number = $_POST['cheque_number'] ?? null;
     $bank_name = $_POST['bank_name'] ?? null;
     $cheque_date = $_POST['cheque_date'] ?? null;
-
-    // Input validation
-    $new_amount = filter_var($new_amount, FILTER_VALIDATE_FLOAT);
-    if (!$new_amount || $new_amount <= 0) {
-        $_SESSION['toastr'] = [
-            'type' => 'error',
-            'message' => 'Invalid amount'
+    
+    $new_amount=filter_var($new_amount, FILTER_VALIDATE_FLOAT);
+    if(!$new_amount||$new_amount<=0){
+        $_SESSION['toastr']=[
+            'type'=>'error',
+            'message'=>'Invalid amount'
         ];
-        header('Location: credit.php');
+        header('Location: debit.php');
         exit();
     }
-
-    // Validate cheque details if credit mode is Cheque
-    if ($credit_mode === 'Cheque') {
-        if (empty($cheque_number)) {
-            $_SESSION['toastr'] = [
-                'type' => 'error',
-                'message' => 'Cheque number is required for cheque payments'
+    if ($debit_mode === 'Cheque'){
+        if(empty($cheque_number)){
+            $_SESSION['toastr']=[
+                'type'=>'error',
+                'message'=>'Cheque number is required for cheque payments'
             ];
-            header('Location: credit.php');
+            header('Location: debit.php');
             exit();
         }
-        
-        if (empty($bank_name)) {
-            $_SESSION['toastr'] = [
+
+        if(empty($bank_name)){
+            $_SESSION['toastr']=[
                 'type' => 'error',
                 'message' => 'Bank name is required for cheque payments'
             ];
-            header('Location: credit.php');
+            header('Location: debit.php');
             exit();
         }
+
     }
 
     try {
         $pdo->beginTransaction();
-
-        // First, get the old credit amount and account ID to reverse the previous transaction
-        $query_old = "SELECT amount, acc_id FROM credit_tbl WHERE credit_id = :credit_id";
-        $stmt_old = $pdo->prepare($query_old);
-        $stmt_old->bindParam(':credit_id', $credit_id, PDO::PARAM_INT);
+        $querry_old="SELECT amount,dbt_acc_id FROM debit_tbl WHERE debit_id=:debit_id";
+        $stmt_old=$pdo->prepare($querry_old);
+        $stmt_old->bindParam(':debit_id',$debit_id,PDO::PARAM_INT);
         $stmt_old->execute();
-        $old_credit = $stmt_old->fetch(PDO::FETCH_ASSOC);
+        $old_debit=$stmt_old->fetch(PDO::FETCH_ASSOC);
 
-        if (!$old_credit) {
-            throw new Exception('Credit record not found');
+        if(!$old_debit){
+            throw new Exception('Debit record not found');
         }
+        $old_amount=$old_debit['amount'];
+        $old_dbt_acc_id = $old_debit['dbt_acc_id'];
+        
+       $amount_difference= $new_amount-$old_amount;
+     
 
-        $old_amount = $old_credit['amount'];
-        $old_acc_id = $old_credit['acc_id'];
+        $query = "UPDATE debit_tbl SET amount=:amount, debit_mode=:debit_mode, d_date=:d_date, dbt_c_id=:dbt_c_id, dbt_gl_id=:dbt_gl_id, dbt_acc_id=:dbt_acc_id, cheque_number=:cheque_number, bank_name=:bank_name, cheque_date=:cheque_date  WHERE debit_id=:debit_id";
 
-        // Calculate the difference in amounts
-        $amount_difference = $new_amount - $old_amount;
-
-        // Update the credit record
-        $query = "UPDATE credit_tbl SET 
-                    amount = :amount, 
-                    credit_mode = :credit_mode, 
-                    c_date = :c_date, 
-                    c_id = :c_id, 
-                    gl_id = :gl_id, 
-                    acc_id = :acc_id, 
-                    cheque_number = :cheque_number, 
-                    bank_name = :bank_name, 
-                    cheque_date = :cheque_date  
-                  WHERE credit_id = :credit_id";
-
+        
         $stmt = $pdo->prepare($query);
-        $stmt->bindParam(':credit_id', $credit_id, PDO::PARAM_INT);
+        $stmt->bindParam(':debit_id', $debit_id, PDO::PARAM_INT);
         $stmt->bindParam(':amount', $new_amount, PDO::PARAM_STR);
-        $stmt->bindParam(':credit_mode', $credit_mode, PDO::PARAM_STR);
-        $stmt->bindParam(':c_date', $c_date, PDO::PARAM_STR);
-        $stmt->bindParam(':c_id', $c_id, PDO::PARAM_INT);
-        $stmt->bindParam(':gl_id', $gl_id, PDO::PARAM_STR);
-        $stmt->bindParam(':acc_id', $acc_id, PDO::PARAM_INT);
+        $stmt->bindParam(':debit_mode', $debit_mode, PDO::PARAM_STR);
+        $stmt->bindParam(':d_date', $d_date, PDO::PARAM_STR);
+        $stmt->bindParam(':dbt_c_id', $dbt_c_id, PDO::PARAM_INT);
+        $stmt->bindParam(':dbt_gl_id', $dbt_gl_id, PDO::PARAM_STR);
+        $stmt->bindParam(':dbt_acc_id', $dbt_acc_id, PDO::PARAM_STR);
         $stmt->bindParam(':cheque_number', $cheque_number, PDO::PARAM_STR);
         $stmt->bindParam(':bank_name', $bank_name, PDO::PARAM_STR);
         $stmt->bindParam(':cheque_date', $cheque_date, PDO::PARAM_STR);
         $stmt->execute();
-
-        // Update account balances based on account changes
-        if ($old_acc_id != $acc_id) {
+         // Update account balances based on account changes
+        if ($old_dbt_acc_id != $dbt_acc_id) {
             // Account changed - remove old amount from old account and add new amount to new account
             
             // Remove old amount from old account
-            $update_old_acc = "UPDATE account_tbl SET acc_ammo = acc_ammo - :old_amount WHERE acc_id = :old_acc_id";
+            $update_old_acc = "UPDATE account_tbl SET acc_ammo = acc_ammo - :old_amount WHERE acc_id = :old_dbt_acc_id";
             $stmt_old_acc = $pdo->prepare($update_old_acc);
             $stmt_old_acc->bindParam(':old_amount', $old_amount, PDO::PARAM_STR);
-            $stmt_old_acc->bindParam(':old_acc_id', $old_acc_id, PDO::PARAM_INT);
+            $stmt_old_acc->bindParam(':old_dbt_acc_id', $old_dbt_acc_id, PDO::PARAM_INT);
             $stmt_old_acc->execute();
 
             // Add new amount to new account
@@ -145,9 +128,9 @@ if (isset($_SESSION['userAuth']) && $_SESSION['userAuth'] != "") {
         }
 
         // Check for negative balance (optional - you might want to allow this)
-        $balance_check = "SELECT acc_ammo FROM account_tbl WHERE acc_id IN (:old_acc_id, :new_acc_id)";
+        $balance_check = "SELECT acc_ammo FROM account_tbl WHERE acc_id IN (:old_dbt__acc_id, :new_acc_id)";
         $stmt_balance = $pdo->prepare($balance_check);
-        $stmt_balance->bindParam(':old_acc_id', $old_acc_id, PDO::PARAM_INT);
+        $stmt_balance->bindParam(':old_dbt__acc_id', $old_dbt__acc_id, PDO::PARAM_INT);
         $stmt_balance->bindParam(':new_acc_id', $acc_id, PDO::PARAM_INT);
         $stmt_balance->execute();
         
@@ -162,23 +145,25 @@ if (isset($_SESSION['userAuth']) && $_SESSION['userAuth'] != "") {
         }
 
         $pdo->commit();
-
+       
+       
         $_SESSION['toastr'] = [
             'type' => 'success',
-            'message' => 'Credit updated successfully!'
+            'message' => 'Debit updated successfully!'
         ];
-        header('Location: credit.php');
+        header('Location: debit.php');
         exit();
 
-    } catch (Exception $e) {
-        $pdo->rollBack();
+    } catch (PDOException $e) {
+        // $pdo->rollBack();
         $_SESSION['toastr'] = [
             'type' => 'error',
-            'message' => 'Error updating credit: ' . $e->getMessage()
+            'message' => 'Error updating debit: ' . $e->getMessage()
         ];
-        header('Location: credit.php');
+        header('Location: debit.php');
         exit();
     }
+    //  }
 
 } else {
     $_SESSION['toastr'] = [

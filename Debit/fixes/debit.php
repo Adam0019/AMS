@@ -15,8 +15,8 @@ if ($_SESSION['userAuth'] != "" && $_SESSION['userAuth'] != NULL) {
             <div class="col-md-8">
                 <h4><i class="bi bi-cash-coin"></i> Manage Debit</h4>
             </div>
-            <!-- Add Debit Modal Button -->
-            <div class="mt-4 px-4">
+            <div class="col-md-4">
+                <!-- Add Debit Modal Button -->
                 <button type="button" class="btn btn-light float-end" data-bs-toggle="modal" data-bs-target="#debitModal">
                     <i class="bi bi-person-fill-add"></i>
                     Add Debit
@@ -713,7 +713,7 @@ if (customerId === 'other') {
     });
 
     // Edit Debit Modal
-   /* document.querySelectorAll('.editDebit').forEach(button => {
+    document.querySelectorAll('.editDebit').forEach(button => {
         button.addEventListener('click', () => {
             document.getElementById('edit_debit_id').value = button.getAttribute('data-id');
             document.getElementById('edit_d_date').value = button.getAttribute('data-d_date');
@@ -724,11 +724,10 @@ if (customerId === 'other') {
             document.getElementById('edit_debit_mode').value = debitMode;
             document.getElementById('edit_dbt_c_id').value = button.getAttribute('data-dbt_c_id');
             document.getElementById('edit_dbt_gl_id').value = button.getAttribute('data-dbt_gl_id');
-              // Account selection handler for Edit Debit Modal
-    document.getElementById('edit_dbt_acc_id').addEventListener('change', function() {
+            document.getElementById('edit_dbt_acc_id').value = button.getAttribute('data-dbt_acc_id');
+             document.getElementById('edit_dbt_acc_id').addEventListener('change', function() {
         fetchAccountBalance(this.value, 'edit_debit_account_balance_display');
     });
-
             // Set cheque details
             document.getElementById('edit_cheque_number').value = button.getAttribute('data-cheque_number') || '';
             document.getElementById('edit_bank_name').value = button.getAttribute('data-bank_name') || '';
@@ -771,13 +770,9 @@ if (customerId === 'other') {
         // Check account balance for edit form
         const balanceElement = document.getElementById('edit_debit_account_balance_display');
         const currentBalance = parseFloat(balanceElement.getAttribute('data-balance') || '0');
-      // Get the original amount to calculate the difference
-        const originalAmount = parseFloat(document.getElementById('edit_amount').getAttribute('data-original') || '0');
-        const amountDifference = amount - originalAmount;
         
-        // Only check balance if we're increasing the debit amount
-        if (amountDifference > 0 && amountDifference > currentBalance) {
-            alert(`Insufficient balance for additional debit! Current balance: ₹${currentBalance.toFixed(2)}, Additional debit required: ₹${amountDifference.toFixed(2)}`);
+        if (amount > currentBalance) {
+            alert(`Insufficient balance! Current balance: ₹${currentBalance.toFixed(2)}, Debit amount: ₹${amount.toFixed(2)}`);
             return;
         }
         const form = e.target;
@@ -805,98 +800,8 @@ if (customerId === 'other') {
             console.error('Error:', error);
             alert("Network error occurred. Please try again.");
         });
-    });*/
-
-    // Edit Debit Modal
-document.querySelectorAll('.editDebit').forEach(button => {
-    button.addEventListener('click', () => {
-        document.getElementById('edit_debit_id').value = button.getAttribute('data-id');
-        document.getElementById('edit_d_date').value = button.getAttribute('data-d_date');
-        document.getElementById('edit_amount').value = button.getAttribute('data-amount');
-        
-        const debitMode = button.getAttribute('data-debit_mode');
-        document.getElementById('edit_debit_mode').value = debitMode;
-        document.getElementById('edit_dbt_c_id').value = button.getAttribute('data-dbt_c_id');
-        document.getElementById('edit_dbt_gl_id').value = button.getAttribute('data-dbt_gl_id');
-        
-        // Set the account and fetch its balance
-        const accountId = button.getAttribute('data-dbt_acc_id');
-        document.getElementById('edit_dbt_acc_id').value = accountId;
-        
-        // Fetch balance for the selected account immediately
-        fetchAccountBalance(accountId, 'edit_debit_account_balance_display');
-        
-        // Set cheque details
-        document.getElementById('edit_cheque_number').value = button.getAttribute('data-cheque_number') || '';
-        document.getElementById('edit_bank_name').value = button.getAttribute('data-bank_name') || '';
-        document.getElementById('edit_cheque_date').value = button.getAttribute('data-cheque_date') || '';
-        
-        // Show/hide cheque details based on debit mode
-        const chequeDetails = document.getElementById('editChequeDetails');
-        if (debitMode === 'Cheque') {
-            chequeDetails.style.display = 'block';
-        } else {
-            chequeDetails.style.display = 'none';
-        }
     });
-});
 
-// Account balance fetch for Edit Debit Modal - when account selection changes
-document.getElementById('edit_dbt_acc_id').addEventListener('change', function() {
-    fetchAccountBalance(this.value, 'edit_debit_account_balance_display');
-});
-
-// Edit Debit Form Submission
-document.getElementById('editDebitForm').addEventListener('submit', function(e){
-    e.preventDefault();
-    
-    // Validate amount
-    const amount = parseFloat(document.getElementById('edit_amount').value);
-    if (isNaN(amount) || amount <= 0) {
-        alert('Please enter a valid amount greater than 0');
-        return;
-    }
-    
-    // Check account balance for edit form
-    const balanceElement = document.getElementById('edit_debit_account_balance_display');
-    const currentBalance = parseFloat(balanceElement.getAttribute('data-balance') || '0');
-    
-    // Get the original amount to calculate the difference
-    const originalAmount = parseFloat(document.querySelector('.editDebit[data-id="' + document.getElementById('edit_debit_id').value + '"]').getAttribute('data-amount'));
-    const amountDifference = amount - originalAmount;
-    
-    // Only check balance if the debit amount is increasing
-    if (amountDifference > 0 && amountDifference > currentBalance) {
-        alert(`Insufficient balance for the additional debit! Current balance: ₹${currentBalance.toFixed(2)}, Additional debit: ₹${amountDifference.toFixed(2)}`);
-        return;
-    }
-    
-    const form = e.target;
-    const formData = new FormData(form);
-    
-    fetch('updateDebit.php', {
-        method:'POST',
-        body:formData
-    }) 
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return response.text();
-    })
-    .then(data => {
-        if(data.includes('Debit updated successfully')){
-            alert('Debit updated successfully!');
-            window.location.href = "debit.php";
-        } else {
-            alert("Error: " + data);
-        }
-    }) 
-    .catch(error => {
-        console.error('Error:', error);
-        alert("Network error occurred. Please try again.");
-    });
-});
     // Delete Debit Modal
     document.querySelectorAll('.deleteDebit').forEach(button => {
         button.addEventListener('click', () => {
