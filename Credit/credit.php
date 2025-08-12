@@ -8,6 +8,21 @@ if ($_SESSION['userAuth'] != "" && $_SESSION['userAuth'] != NULL) {
     if (!isset($_SESSION['csrf_token'])) {
         $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
     }
+    $date_sql="";
+    $toDate=$fromDate="";
+    if(isset($_POST['submit'])){
+      $from=$_POST['from'];
+      $fromDate=$from;
+      $fromArr=explode("/",$from);
+      $from=$fromArr['2'].'-'.$fromArr['1'].'-'.$fromArr['0'];
+      //$from=$from."00:00:00";
+      $to=$_POST['to'];
+      $toDate=$to;
+      $toArr=explode("/",$to);
+      $to=$toArr['2'].'-'.$toArr['1'].'-'.$toArr['0'];
+      //$to=$to."00:00:00";
+      $date_sql="WHERE c_date >='$from' && c_date <= '$to' ";
+    }
 ?>
 <main class="mt-3 pt-3">
     <div class="container-fluid">
@@ -23,7 +38,7 @@ if ($_SESSION['userAuth'] != "" && $_SESSION['userAuth'] != NULL) {
                 </button>
             </div>
         </div>
-
+     
         <?php
         // Database connection using PDO
         require_once('../config/dbcon.php');
@@ -33,6 +48,7 @@ if ($_SESSION['userAuth'] != "" && $_SESSION['userAuth'] != NULL) {
     INNER JOIN customer_tbl ON credit_tbl.c_id = customer_tbl.c_id
     INNER JOIN gl_tbl ON credit_tbl.gl_id = gl_tbl.gl_id
     INNER JOIN account_tbl ON credit_tbl.acc_id = account_tbl.acc_id
+    $date_sql
     ORDER BY credit_tbl.credit_id";
 
             $stmt = $pdo->prepare($query);
@@ -43,8 +59,19 @@ if ($_SESSION['userAuth'] != "" && $_SESSION['userAuth'] != NULL) {
             $result = [];
         }
         ?>
-
+        
+     
         <div class="mt-3">
+           <div>
+        <form method="POST">
+          <label for="from">From</label>
+          <input type="text" id="from" name="from" required value="<?php echo $fromDate ?>">
+          <label for="to">To</label>
+          <input type="text" id="to" name="to" required value="<?php echo $toDate ?>">
+          <input type="submit" name="submit" value="Filter">
+        </form>
+      </div>
+      <br><br>
             <table id="example" class="table table-striped data-table" style="width:100%">
                 <thead>
                     <tr>
@@ -524,6 +551,39 @@ try {
 <?php include('../includes/footer.php'); ?>
 
 <script>
+   $( function() {
+    var dateFormat = "dd/mm/yy",
+      from = $( "#from" )
+        .datepicker({
+          defaultDate: "+1w",
+          changeMonth: true,
+          numberOfMonths: 2,
+          dateFormat:"dd/mm/yy"
+        })
+        .on( "change", function() {
+          to.datepicker( "option", "minDate", getDate( this ) );
+        }),
+      to = $( "#to" ).datepicker({
+        defaultDate: "+1w",
+        changeMonth: true,
+        numberOfMonths: 2,
+        dateFormat:"dd/mm/yy"
+      })
+      .on( "change", function() {
+        from.datepicker( "option", "maxDate", getDate( this ) );
+      });
+ 
+    function getDate( element ) {
+      var date;
+      try {
+        date = $.datepicker.parseDate( dateFormat, element.value );
+      } catch( error ) {
+        date = null;
+      }
+ 
+      return date;
+    }
+  } );
   // Function to fetch and display account balance
 function fetchAccountBalance(accId, displayElementId) {
     if (!accId || accId === '') {
