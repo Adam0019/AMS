@@ -23,6 +23,7 @@ if (isset($_POST['submit'])){
         $_SESSION['acc_num']="";
         $_SESSION['c_name']="";
         $_SESSION['c_amount']="";
+        $_SESSION['balance']="";
 
         // $_SESSION['new_ammo']="";
 

@@ -16,7 +16,7 @@
                     <li class="sidebar-item">
                         <a href="#" class="sidebar-link collapsed" data-bs-target="#pages1" data-bs-toggle="collapse"
                             aria-expanded="false"><i class="bi bi-person-badge-fill"></i>
-                            Admin Settings
+                            Admin
                         </a>
                     <ul id="pages1" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">    
                     <li class="sidebar-item">
@@ -33,7 +33,7 @@
                     </li>
                     <li class="sidebar-item">
                         <a href="../General_Ledger/gl_title.php" class="sidebar-link">
-                            <i class="bi bi-credit-card-fill"></i>
+                            <i class="bi bi-card-heading"></i>
                              General Ledger
                         </a>
                     </li>
@@ -47,21 +47,18 @@
                     </li>
                     <li class="sidebar-item">
                         <a href="#" class="sidebar-link collapsed" data-bs-target="#pages" data-bs-toggle="collapse"
-                            aria-expanded="false"><i class="fa-solid fa-file-lines pe-2"></i>
+                            aria-expanded="false"><i class="bi bi-book-fill"></i>
                             Balance Sheet
                         </a>
                         <ul id="pages" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
                             <li class="sidebar-item">
-                                <a href="../Credit/credit.php" class="sidebar-link">Credit</a>
+                                <a href="../Credit/credit.php" class="sidebar-link"><i class="bi bi-currency-rupee"></i>Credit</a>
                             </li>
                             <li class="sidebar-item">
-                                <a href="../Debit/debit.php" class="sidebar-link">Debit</a>
+                                <a href="../Debit/debit.php" class="sidebar-link"><i class="bi bi-currency-rupee"></i>Debit</a>
                             </li>
                             <li class="sidebar-item">
-                                <a href="../BalanceSheet/balance_sheet.php" class="sidebar-link">Balance Sheet</a>
-                            </li>
-                            <li class="sidebar-item">
-                                <a href="../test/test.php" class="sidebar-link">Balance Sheet</a>
+                                <a href="../BalanceSheet/balance_sheet.php" class="sidebar-link"><i class="bi bi-file-earmark-bar-graph"></i>Balance Sheet</a>
                             </li>
                         </ul>
                     </li>
@@ -103,7 +100,7 @@
                     </li> -->
 
 
-                    <li class="sidebar-header">
+                    <!-- <li class="sidebar-header">
                         Multi Level Menu
                     </li>
                     <li class="sidebar-item">
@@ -121,7 +118,7 @@
                                     </li>
                                     <li class="sidebar-item">
                                         <a href="#" class="sidebar-link">Level 1.2</a>
-                                    </li>
+                                    </li> -->
                                 </ul>
                             </li>
                         </ul>

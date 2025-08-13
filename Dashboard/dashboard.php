@@ -36,7 +36,10 @@ if($_SESSION['userAuth']!="" && $_SESSION['userAuth']!=NULL){
                                     <div class="d-flex align-items-start">
                                         <div class="flex-grow-1">
                                             <h4 class="mb-2">
-                                                $ 78.00
+                                                 <?php 
+                                                $tbalance = $_SESSION['balance'] ?? 0;
+                                                 echo '₹ :' . $tbalance;
+                                                ?>
                                             </h4>
                                             <p class="mb-2">
                                                 Total Earnings

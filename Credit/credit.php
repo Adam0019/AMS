@@ -62,15 +62,40 @@ if ($_SESSION['userAuth'] != "" && $_SESSION['userAuth'] != NULL) {
         
      
         <div class="mt-3">
-           <div>
-        <form method="POST">
-          <label for="from">From</label>
-          <input type="text" id="from" name="from" required value="<?php echo $fromDate ?>">
-          <label for="to">To</label>
-          <input type="text" id="to" name="to" required value="<?php echo $toDate ?>">
-          <input type="submit" name="submit" value="Filter">
-        </form>
-      </div>
+            <!-- Date Filter Form -->
+        <div class="row mt-3">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <form method="POST" class="row g-3">
+                            <div class="col-md-3">
+                                <label for="from" class="form-label">From</label>
+                                <input type="text" class="form-control" id="from" name="from" 
+                                       value="<?php echo $fromDate; ?>" placeholder="dd/mm/yyyy">
+                            </div>
+                            <div class="col-md-3">
+                                <label for="to" class="form-label">To</label>
+                                <input type="text" class="form-control" id="to" name="to" 
+                                       value="<?php echo $toDate; ?>" placeholder="dd/mm/yyyy">
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label">&nbsp;</label>
+                                <button type="submit" name="submit" class="btn btn-primary d-block">
+                                    <i class="bi bi-funnel"></i> Filter
+                                </button>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label">&nbsp;</label>
+                                <a href="credit.php" class="btn btn-outline-secondary d-block">
+                                    <i class="bi bi-arrow-clockwise"></i> Reset
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
       <br><br>
             <table id="example" class="table table-striped data-table" style="width:100%">
                 <thead>
