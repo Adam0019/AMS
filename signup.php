@@ -30,10 +30,13 @@ include('config/dbcon.php');
         <label for="password">Enter your password</label>
       </div>
       <div class="input-field">
-        <select name="role" id="role" required>
+        <!-- <select name="role" id="role" required>
           <option value="User"selected>User</option>
-          <option value="Admin">Admin</option>
-        </select>
+          <option value="Admin">Admin</option> 
+        </select>-->
+        <!-- <label for="role">Your default Role</label> -->
+        <input type="text" id="role"  name="role" value="Admin" disabled>
+        </div>
       <input type="submit" class="button" value="Sign Up" name="submit">
       <div class="register">
         <p>Already have an account? <a href="index.php">Login</a></p>

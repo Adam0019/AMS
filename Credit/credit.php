@@ -819,9 +819,10 @@ if (customerId === 'other') {
             document.getElementById('edit_gl_id').value = button.getAttribute('data-gl_id');
             // document.getElementById('edit_acc_id').value = button.getAttribute('data-acc_id');
           // Add this to your existing JavaScript in credit.php
-            document.getElementById('edit_acc_id').addEventListener('change', function() {
-            fetchAccountBalance(this.value, 'edit_account_balance_display');
-});
+          const accId= button.getAttribute('data-acc_id');
+            document.getElementById('edit_acc_id').value=accId; 
+            fetchAccountBalance(accId, 'edit_account_balance_display');
+
             
             // Set cheque details
             document.getElementById('edit_cheque_number').value = button.getAttribute('data-cheque_number') || '';

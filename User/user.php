@@ -132,7 +132,8 @@ if(isset($_SESSION['userAuth'])&& $_SESSION['userAuth']!=""){
                         <div class="form-group mt-4">
                             <label for="role">Role</label>
                             <select class="form-select" id="role" name="role" required>
-                                <option value="User"selected>User</option>
+                                <option value=""disabled selected>Role</option>
+                                <option value="User">User</option>
                                 <option value="Admin">Admin</option>
                             </select>
                         </div> 
